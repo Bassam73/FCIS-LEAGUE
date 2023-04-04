@@ -1,0 +1,198 @@
+#include<iostream>
+#include <fstream>
+
+using namespace std;
+struct date
+{
+    int day, month, year;
+};
+
+struct player
+{
+int ID;
+string name;
+string nationality;
+date birth;
+};
+
+
+player p[34];
+//functions
+void ADMIN();
+void User();
+void Aregister();
+void Alogin();
+void addTeams();
+void addplayers();
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+//global variables 
+
+const int NUM_TEAMS = 20;
+string teams[NUM_TEAMS];
+
+//main fuctions for admin and user 
+int main()
+{
+    //Select user or admin 
+
+    cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
+    cout << "Please Select ADMIN Or User" << endl;
+    cout << "1- ADMIN" << endl;
+    cout << "2- User" << endl;
+    //Process
+    int ADMINorUSER;
+    cin >> ADMINorUSER;
+    switch (ADMINorUSER)
+    {
+    case 1:
+        ADMIN();
+        break;
+    case 2:
+        User();
+        break;
+    default:
+        system("cls");
+        cout << "please choose 1 or 2 \n";
+        main();
+        break;
+    }
+}
+void ADMIN()
+{
+    int AloginorAregister;
+    cout << " ----------------- main menu ------------------\n";
+    cout << "choose 1 or 2 \n";
+    cout << "1- register \n";
+    cout << "2- login  \n";
+    cin >> AloginorAregister;
+    switch (AloginorAregister)
+    {
+    case 1:
+        Aregister();
+        break;
+    case 2:
+        Alogin();
+        break;
+    default:
+        system("cls");
+        cout << "Please select 1 or 2" << endl;
+        ADMIN();
+        break;
+    }
+}
+
+void User() 
+{
+    cout << "Welcome to User ";
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//Admin Register And login 
+
+void Aregister()
+{
+    string Ausername, Apassowrd;
+    cout << "--------------------------------------------------------------------------------------------\n";
+    cout << " Enter the username  : ";
+    cin >> Ausername;
+    cout << " Enter the password  : ";
+    cin >> Apassowrd;
+    ofstream f1("records.txt", ios::app);
+    f1 << Ausername << ' ' << Apassowrd << endl;
+    system("cls");
+    cout << "you have registered successfully\nLogin now with your account";
+    ADMIN();
+}
+
+
+void Alogin()
+{
+    bool count = 0;
+    string Ausername, Apassowrd, Aemail, id, password;
+    cout << "--------------------------------------------------------------------------------------------\n";
+    cout << " Enter the username  : ";
+    cin >> Ausername;
+    cout << " Enter the password  : ";
+    cin >> Apassowrd;
+    ifstream input("records.txt");
+
+    while (input >> id >> password)
+    {
+        if (id == Ausername && password == Apassowrd)
+            count = 1;
+    }
+    if (count == 1)
+    {
+        system("cls");
+        cout << "You logged in successfully\n";
+        addplayers();
+    }
+    else
+    {
+        system("cls");
+        cout << "Please check your information\n";
+        ADMIN();
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/*
+User Register And Login*/
+
+void addTeams() 
+{
+    cout << "Please enter the names of the " << NUM_TEAMS << " teams:" << endl;
+    for (int i = 0; i < NUM_TEAMS; i++) {
+        cout << "Team " << i + 1 << ": ";
+        cin >> teams[i];
+    }
+    ofstream Teams;
+    Teams.open("Teams.txt");
+    for (int i = 0; i < NUM_TEAMS; i++)
+    {
+        Teams << teams[i] << endl;
+    }
+    Teams.close();
+
+    cout << "The " << NUM_TEAMS << " teams have been added." << endl;
+}
+void addplayers(){
+
+for(int i=0; i<34;i++){
+cout << "Enter player id\n";
+
+cin>>p[i].ID;
+
+cout << "----------------\n";
+
+cout<<"Enter player's name\n";
+
+cin>>p[i].name;
+
+cout << "----------------\n";
+
+cout<<"Enter player's nationality\n";
+cin>>p[i].nationality;
+   
+    cout << "----------------\n";
+ 
+ cout<<"Enter player's birth date\n";
+ cin>>p[i].birth.day>>p[i].birth.month>>p[i].birth.year;
+    
+    
+}
+   
+
+
+}
