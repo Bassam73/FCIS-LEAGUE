@@ -249,20 +249,28 @@ void Afunctions (){
     {
         int choice;
           cout<<" select  \n";
-                cout << "1 - Enter teams  : "<<endl;
-                    cout << " 2- Enter players  : "<<endl;
+                cout << "1 - Enter teams   "<<endl;
+                    cout << "2- Enter players   "<<endl;
+                    cout << "3- Generate Matches " << endl;
                     cin>>choice;
 
           switch (choice)
     {
     case 1:
         addTeams();
+        Afunctions();
         break;
     case 2:
         addplayers();
+        Afunctions();
+        break;
+    case 3:
+        generate();
+        Afunctions;
+        break;
 
-    break;
-    default:
+        break;
+        default:
         system("cls");
 
 
@@ -359,5 +367,4 @@ void generate()
         rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
     }
 }
-
 
