@@ -1,370 +1,403 @@
 #include<iostream>
-#include <fstream>
+#include<string>
+#include<fstream>
 #include<algorithm>
 
 using namespace std;
-struct date
-{
-    int day, month, year;
+
+// global variables//
+
+const int NUM_TEAMS = 20;
+
+const int MAX_TEAMS = 20;
+
+const int MAX_PLAYERS_PER_TEAM = 34;
+
+bool start = 0;
+
+bool DataEntered = false;
+
+struct Date {
+	int day;
+	int month;
+	int year;
 };
 
-struct player
-{
-    int ID;
-    string name;
-    string nationality;
-    date birth;
+struct Player {
+	int id;
+	string name, nation;
+	Date birthdate;
 };
 
-struct team
-{
-    int ID;
-    string name;
-    player Players[34];
+struct Team {
+	string name;
+	Player players[34];
+	int id;
 };
 
-player p[34];
+
 //functions
 void ADMIN();
 void User();
 void Aregister();
 void Alogin();
-void addTeams();
-void addplayers();
+void TeamData();
 void generate();
 void Usignup();
 void Ulogin();
 void Afunctions();
+void startseason();
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//global variables 
 
-const int NUM_TEAMS = 20;
-string teams[NUM_TEAMS];
 
-//main fuctions for admin and user 
+//main fuctions for admin and user
 int main()
 {
-    //Select user or admin 
+	//Select user or admin
 
-    cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
-    cout << "Please Select ADMIN Or User" << endl;
-    cout << "1- ADMIN" << endl;
-    cout << "2- User" << endl;
-    //Process
-    int ADMINorUSER;
-    cin >> ADMINorUSER;
-    switch (ADMINorUSER)
-    {
-    case 1:
-        ADMIN();
-        break;
-    case 2:
-        User();
-        break;
-    default:
-        system("cls");
-        cout << "please choose 1 or 2 \n";
-        main();
-        break;
-    }
+	cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
+	cout << "Please Select ADMIN Or User" << endl;
+	cout << "1- ADMIN" << endl;
+	cout << "2- User" << endl;
+	//Process
+	int ADMINorUSER;
+	cin >> ADMINorUSER;
+	switch (ADMINorUSER)
+	{
+	case 1:
+		ADMIN();
+		break;
+	case 2:
+		User();
+		break;
+	default:
+		system("cls");
+		cout << "please choose 1 or 2 \n";
+		main();
+		break;
+	}
 }
 void ADMIN()
 {
-    int AloginorAregister;
-    cout << " ----------------- main menu ------------------\n";
-    cout << "choose 1 or 2 \n";
-    cout << "1- register \n";
-    cout << "2- login  \n";
-    cin >> AloginorAregister;
-    switch (AloginorAregister)
-    {
-    case 1:
-        Aregister();
-        break;
-    case 2:
-        Alogin();
-        break;
-    default:
-        system("cls");
-        cout << "Please select 1 or 2" << endl;
-        ADMIN();
-        break;
-    }
+	int AloginorAregister;
+	cout << " ----------------- MAIN MENU ------------------\n";
+	cout << "choose 1 or 2 \n";
+	cout << "1- register \n";
+	cout << "2- login \n";
+	cin >> AloginorAregister;
+	switch (AloginorAregister)
+	{
+	case 1:
+		Aregister();
+		break;
+	case 2:
+		Alogin();
+		break;
+	default:
+		system("cls");
+		cout << "Please select 1 or 2" << endl;
+		ADMIN();
+		break;
+	}
 }
 
 void User()
 {
-    int UserVariable;
+	int UserVariable;
 
-    cout << "\t\t\t---------Welcome to User---------\t\t\t\n";
-    cout << "Please select 1 or 2 \n";
-    cout << "1-Register\n";
-    cout << "2-Login\n";
-    cin >> UserVariable;
-    switch (UserVariable)
-    {
-    case 1:
-            Usignup();
-            break;
-    case 2:
-             Ulogin();
-             break;
-    default:
-             system("cls");
-             User();  
-             break;
-    }
+	cout << "\t\t\t-------------Welcome to User-------------\t\t\t\n";
+	cout << "Please select 1 or 2 \n";
+	cout << "1-Register\n";
+	cout << "2-Login\n";
+	cin >> UserVariable;
+	switch (UserVariable)
+	{
+	case 1:
+		Usignup();
+		break;
+	case 2:
+		Ulogin();
+		break;
+	default:
+		system("cls");
+		User();
+		break;
+	}
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-//Admin Register And login 
+//Admin Register And login
 
 void Aregister()
 {
-    string Ausername, Apassowrd;
-    cout << "--------------------------------------------------------------------------------------------\n";
-    cout << " Enter the username  : ";
-    cin >> Ausername;
-    cout << " Enter the password  : ";
-    cin >> Apassowrd;
-    ofstream f1("records.txt", ios::app);
-    f1 << Ausername << ' ' << Apassowrd << endl;
-    system("cls");
-    cout << "you have registered successfully\nLogin now with your account";
-    ADMIN();
+	string Ausername, Apassowrd;
+	cout << "--------------------------------------------------------------------------------------------\n";
+	cout << " Enter the username : ";
+	cin >> Ausername;
+	cout << " Enter the password : ";
+	cin >> Apassowrd;
+	ofstream f1("records.txt", ios::app);
+	f1 << Ausername << ' ' << Apassowrd << endl;
+	system("cls");
+	cout << "you have registered successfully\nLogin now with your account";
+	ADMIN();
 }
-
 
 void Alogin()
 {
-    bool count = 0;
-    string Ausername, Apassowrd, Aemail, id, password;
-    cout << "--------------------------------------------------------------------------------------------\n";
-    cout << " Enter the username  : ";
-    cin >> Ausername;
-    cout << " Enter the password  : ";
-    cin >> Apassowrd;
-    ifstream input("records.txt");
+	bool count = 0;
+	string Ausername, Apassowrd, Aemail, id, password;
+	cout << "--------------------------------------------------------------------------------------------\n";
+	cout << " Enter the username : ";
+	cin >> Ausername;
+	cout << " Enter the password : ";
+	cin >> Apassowrd;
+	ifstream input("records.txt");
 
-    while (input >> id >> password)
-    {
-        if (id == Ausername && password == Apassowrd)
-            count = 1;
-    }
-    if (count == 1)
-    {
-        system("cls");
-        cout << "You logged in successfully\n";
-        Afunctions();
-    }
-    else
-    {
-        system("cls");
-        cout << "Please check your information\n";
-        ADMIN();
-    }
+	while (input >> id >> password)
+	{
+		if (id == Ausername && password == Apassowrd)
+			count = 1;
+	}
+	if (count == 1)
+	{
+		system("cls");
+		cout << "You logged in successfully\n";
+		Afunctions();
+	}
+	else
+	{
+		system("cls");
+		cout << "Please check your information\n";
+		ADMIN();
+	}
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*User Register And Login*/
+// User Register And Login /
 
-
-void Ulogin() 
+void Ulogin()
 {
-    int count{};
-    string email2, password2, emailz, passwordz;
-    cout << "\t\t\t ------------------FCIS League----------------- \t\t\t" << endl;
-    cout << "please enter email and password :" << "\n";
-    cin >> email2 >> password2;
-    ifstream input("UserSignup.txt");
-    while (input >> emailz >> passwordz)
-    {
-        if (email2 == emailz && password2 == passwordz)
-        {
-            count = 1;
-            system("cls");
-        }
-        input.close();
-        if (count == 1)
-        {
-            cout << "login succesful" << "\n";
-            main();
-        }
-        else {
-            cout << "LOGIN FAILED, TRY AGAIN" << "\n";
-            Ulogin();
-        }
+	int count{};
+	string email2, password2, emailz, passwordz;
+	cout << "\t\t\t ------------------FCIS League----------------- \t\t\t" << endl;
+	cout << "please enter email and password :" << "\n";
+	cin >> email2 >> password2;
+	ifstream input("UserSignup.txt");
+	while (input >> emailz >> passwordz)
+	{
+		if (email2 == emailz && password2 == passwordz)
+		{
+			count = 1;
+			system("cls");
+		}
+		input.close();
+		if (count == 1)
+		{
+			cout << "login succesful" << "\n";
+			main();
+		}
+		else {
+			cout << "LOGIN FAILED, TRY AGAIN" << "\n";
+			Ulogin();
+		}
 
-    }
+	}
 }
-
 
 void Usignup()
 {
-    string firstname, lastname, fullname, emailaddress, password, password_check;
-    cout << "please enter your first name :\t"; cin >> firstname; cout << "\n";
+	string firstname, lastname, fullname, emailaddress, password, password_check;
+	cout << "please enter your first name :\t"; cin >> firstname; cout << "\n";
 
-    cout << "please enter your last name : \t"; cin >> lastname; cout << endl;
+	cout << "please enter your last name : \t"; cin >> lastname; cout << endl;
 
-    fullname = firstname + " " + lastname;
-    cout << "welcome " << fullname << "\n";
-    cout << "please enter your email address :" << "\n";
-    cin >> emailaddress;
-   cout << "please enter your password :" << "\n"; 
-    cin >> password;
-    ofstream f1("UserSignup.txt", ios::app);
-    f1 << emailaddress << ' ' << password << "\n";
-    cout << "please confirm your password :" << "\n";
-    cin >> password_check;
-    for (int i = 0; i < 2; i++)
-    {
-        if (password == password_check)
-        {
-            cout << "signup succsesful" << "\n";
-            cout << "welcome to FCIS league" << "\n";
-            User();
-            break;
-        }
-        else {
+	fullname = firstname + " " + lastname;
+	cout << "welcome " << fullname << "\n";
+	cout << "please enter your email address :" << "\n";
+	cin >> emailaddress;
+	cout << "please enter your password :" << "\n";
+	cin >> password;
+	ofstream f1("UserSignup.txt", ios::app);
+	f1 << emailaddress << ' ' << password << "\n";
+	cout << "please confirm your password :" << "\n";
+	cin >> password_check;
+	for (int i = 0; i < 2; i++)
+	{
+		if (password == password_check)
+		{
+			cout << "signup succsesful" << "\n";
+			cout << "welcome to FCIS league" << "\n";
+			User();
+			break;
+		}
+		else {
 
-            cout << "please try again :" << "\n";
-        }
-        cin >> password_check;
-    }
+			cout << "please try again :" << "\n";
+		}
+		cin >> password_check;
+	}
 
 }
 ////////////////////////////////////////////////////////////////////////////////
 //ADMIN FUNCTIONS
-void Afunctions (){
-   for(int i=0;i<2;i++)
-    {
-        int choice;
-          cout<<" select  \n";
-                cout << "1 - Enter teams   "<<endl;
-                    cout << "2- Enter players   "<<endl;
-                    cout << "3- Generate Matches " << endl;
-                    cin>>choice;
+void Afunctions() {
+	for (int i = 0; i < 2; i++)
+	{
+		
+		int choice;
+		cout << " select \n";
+		if (start == 0)
+		{
+			cout << "1-Enter teams and players " << endl;
+			cout << "2-Generate Matches " << endl;
+			cin >> choice;
+			cout << "--------------------------------------------------------------------------------------------\n";
+		}
+		else if (start == 1)
+		{
+			cout << "1-Enter teams and players " << endl;
+			cout << "2-Generate Matches " << endl;
+			cout << "3-start season\n";
+			cin >> choice;
+			cout << "--------------------------------------------------------------------------------------------\n";
+			if (choice == 3)
+			{
+				startseason();
+			}
+		}
+		if (choice == 1)
+		{
+			TeamData();
+			DataEntered = true;
+		}
+		if (choice == 2 && DataEntered)
+		{
+			generate();
+			startseason();
+		}
+		if (choice == 2 && !DataEntered)
+		{
+			cout << " enter team data first \n";
+			cout << "--------------------------------------------------------------------------------------------\n";
 
-          switch (choice)
-    {
-    case 1:
-        addTeams();
-        Afunctions();
-        break;
-    case 2:
-        addplayers();
-        Afunctions();
-        break;
-    case 3:
-        generate();
-        Afunctions;
-        break;
-
-        break;
-        default:
-        system("cls");
-
-
-    }
+		}
+	}
 }
-    }
-
-
-void addTeams()
+Team team[20];
+void TeamData()
 {
-    cout << "Please enter the names of the " << NUM_TEAMS << " teams:" << endl;
-    for (int i = 0; i < NUM_TEAMS; i++) {
-        cout << "Team " << i + 1 << ": ";
-        cin >> teams[i];
-    }
-    ofstream Teams;
-    Teams.open("Teams.txt");
-    for (int i = 0; i < NUM_TEAMS; i++)
-    {
-        Teams << teams[i] << endl;
-    }
-    Teams.close();
 
-    cout << "The " << NUM_TEAMS << " teams have been added." << endl;
+	for (int i = 0; i < 20; i++)
+	{
+		cout << "Enter the name of team " << i + 1 << ": ";
+		cin >> team[i].name;
+		cout << "Enter names , birthdates and nations of the players in team " << i + 1 << ":" << endl;
+		for (int j = 0; j < 34; j++) {
+			cout << "Enter player " << j + 1 << " name: ";
+			cin >> team[i].players[j].name;
+			cout << "Enter player " << j + 1 << " nation: ";
+			cin >> team[i].players[j].nation;
+			cout << "Enter player " << j + 1 << " birthdate (day / month / year): ";
+			cin >> team[i].players[j].birthdate.day;
+			cin >> team[i].players[j].birthdate.month;
+			cin >> team[i].players[j].birthdate.year;
+		}
+	}
+	ofstream file;
+	file.open("teams.txt");
+	file << 20 << endl;
+	for (int i = 0; i < 20; i++) {
+		file << team[i].name << endl;
+		file << 34 << endl;
+		for (int j = 0; j < 34; j++) {
+			file << team[i].players[j].name << endl;
+			file << team[i].players[j].nation << endl;
+			file << team[i].players[j].birthdate.day << " "
+				<< team[i].players[j].birthdate.month << " "
+				<< team[i].players[j].birthdate.year << endl;
+			file << '\n';
+		}
+		file << '\n';
+	}
+	file.close();
 }
-void addplayers()
-{
-    for (int j = 0; j < NUM_TEAMS; j++)
-    {
-        cout << "Enter " << teams[j] << " players'" << '\n';
-       
-        for (int i = 0; i < 34; i++)
-        {
-            player players;
-            cout << "Enter player "<< i+1 <<" id\n";
 
-            cin >> p[i].ID;
-
-            cout << "----------------\n";
-
-            cout << "Enter player "<<i+1<<" name\n";
-
-            cin >> p[i].name;
-
-            cout << "----------------\n";
-
-            cout << "Enter player " << i + 1 << " nationality\n";
-            cin >> p[i].nationality;
-            cout << "----------------\n";
-
-            cout << "Enter player" << i + 1 << " birth date\n";
-            cin >> p[i].birth.day >> p[i].birth.month >> p[i].birth.year;
-            cout << "----------------\n";
-
-            ofstream file;
-            file.open("players.txt");
-            if (file.is_open()) {
-
-                for (int i = 0; i < 34; i++)
-                {
-                    file << p[i].ID << endl;
-                    file << p[i].name << endl;
-                    file << p[i].nationality << endl;
-                    file << p[i].birth.day << endl;
-                    file << p[i].birth.month << endl;
-                    file << p[i].birth.year << endl;
-
-                }
-
-                file.close();
-            }
-
-        }
-        cout << "\n\n\n";
-    }
-}
 void generate()
 {
-    int NUM_TEAMS = 20;
-    int NUM_ROUNDS = 19;
+	int NUM_ROUNDS = 19;
+	string teams[NUM_TEAMS];
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		teams[i] = team[i].name;
+	}
+	ofstream file;
+	file.open("matches.txt");
+	for (int round = 0; round < NUM_ROUNDS; round++)
+	{
 
+		cout << "Round " << round + 1 << ":\n";
+		file << "Round " << round + 1 << ":\n";
 
-    for (int round = 0; round < NUM_ROUNDS; round++)
-    {
-        cout << "Round " << round + 1 << ":\n";
-
-        for (int i = 0; i < NUM_TEAMS / 2; i++)
-        {
-            string teamA = teams[i];
-            string teamB = teams[NUM_TEAMS - i - 1];
-            cout << teamA << " vs " << teamB << "\n";
-        }
-        cout << "----------------\n";
-        rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
-    }
+		for (int i = 0; i < NUM_TEAMS / 2; i++)
+		{
+			string hometeam = teams[i];
+			string awayteam = teams[NUM_TEAMS - i - 1];
+			cout << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << "\n";
+			file << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << '\n';
+		}
+		cout << "----------------\n";
+		file << "----------------\n";
+		rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
+	}
+	file.close();
 }
 
+
+void startseason()
+{
+	start = 1;
+	cout << "Do You want to start the season?\ny/n\n";
+	char ans = 'y';
+	cin >> ans;
+	if (ans == 'y')
+	{
+		string line;
+		ifstream file("matches.txt");
+		char resume = 'y';
+		int rounds = 0;
+		while (resume == 'y')
+		{
+			int x = 0;
+			while (getline(file, line))
+			{
+				x++;
+				cout << line << '\n';
+				if (x == 12)
+					break;
+			}
+			if (rounds != 19)
+			{
+				cout << "do you want to view next round?y/n\n";
+				cin >> resume;
+			}
+			else
+			{
+				cout << "The season has finished\n";
+				break;
+			}
+			rounds++;
+		}
+	}
+	else
+	{
+		system("cls");
+		Afunctions();
+	}
+}
