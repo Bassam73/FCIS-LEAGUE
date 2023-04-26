@@ -23,6 +23,7 @@ struct Date {
 	int year;
 };
 
+
 struct Player {
 	int id;
 	string name, nation;
@@ -34,6 +35,34 @@ struct Team {
 	Player players[34];
 	int id;
 };
+
+struct Result {
+
+	int Id;
+	int TeamHomeGoals;
+	int TeamAwayGoals;
+
+};
+
+struct Matches
+{
+	int ID;
+	string TeamHome[190];
+	string TeamAway[190];
+	Result Results[190][2];
+};
+
+struct League
+{
+	Team team[20];
+	Matches matches[190];
+	/*Table Struct*/
+} FCIS;
+
+
+
+
+
 
 
 //functions
@@ -248,9 +277,9 @@ void Usignup()
 ////////////////////////////////////////////////////////////////////////////////
 //ADMIN FUNCTIONS
 void Afunctions() {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 1000; i++)
 	{
-		
+
 		int choice;
 		cout << " select \n";
 		if (start == 0)
@@ -290,38 +319,38 @@ void Afunctions() {
 		}
 	}
 }
-Team team[20];
+
 void TeamData()
 {
 
 	for (int i = 0; i < 20; i++)
 	{
 		cout << "Enter the name of team " << i + 1 << ": ";
-		cin >> team[i].name;
+		cin >> FCIS.team[i].name;
 		cout << "Enter names , birthdates and nations of the players in team " << i + 1 << ":" << endl;
 		for (int j = 0; j < 34; j++) {
 			cout << "Enter player " << j + 1 << " name: ";
-			cin >> team[i].players[j].name;
+			cin >> FCIS.team[i].players[j].name;
 			cout << "Enter player " << j + 1 << " nation: ";
-			cin >> team[i].players[j].nation;
+			cin >> FCIS.team[i].players[j].nation;
 			cout << "Enter player " << j + 1 << " birthdate (day / month / year): ";
-			cin >> team[i].players[j].birthdate.day;
-			cin >> team[i].players[j].birthdate.month;
-			cin >> team[i].players[j].birthdate.year;
+			cin >> FCIS.team[i].players[j].birthdate.day;
+			cin >> FCIS.team[i].players[j].birthdate.month;
+			cin >> FCIS.team[i].players[j].birthdate.year;
 		}
 	}
 	ofstream file;
 	file.open("teams.txt");
 	file << 20 << endl;
 	for (int i = 0; i < 20; i++) {
-		file << team[i].name << endl;
+		file << FCIS.team[i].name << endl;
 		file << 34 << endl;
 		for (int j = 0; j < 34; j++) {
-			file << team[i].players[j].name << endl;
-			file << team[i].players[j].nation << endl;
-			file << team[i].players[j].birthdate.day << " "
-				<< team[i].players[j].birthdate.month << " "
-				<< team[i].players[j].birthdate.year << endl;
+			file << FCIS.team[i].players[j].name << endl;
+			file << FCIS.team[i].players[j].nation << endl;
+			file << FCIS.team[i].players[j].birthdate.day << " "
+				<< FCIS.team[i].players[j].birthdate.month << " "
+				<< FCIS.team[i].players[j].birthdate.year << endl;
 			file << '\n';
 		}
 		file << '\n';
@@ -335,7 +364,7 @@ void generate()
 	string teams[NUM_TEAMS];
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
-		teams[i] = team[i].name;
+		teams[i] = FCIS.team[i].name;
 	}
 	ofstream file;
 	file.open("matches.txt");
