@@ -3,6 +3,7 @@
 #include<fstream>
 #include<algorithm>
 
+
 using namespace std;
 
 // global variables//
@@ -42,15 +43,15 @@ struct Result {
 	int TeamHomeGoals;
 	int TeamAwayGoals;
 
-};
+}R;
 
 struct Matches
 {
-	int ID;
+	int ID[190] = { 0 };
 	string TeamHome[190];
 	string TeamAway[190];
-	Result Results[190][2];
-};
+	int Results[190][2] = { 0 };
+}mtch;
 
 struct League
 {
@@ -76,6 +77,7 @@ void Usignup();
 void Ulogin();
 void Afunctions();
 void startseason();
+void res(int i);
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -84,7 +86,6 @@ void startseason();
 int main()
 {
 	//Select user or admin
-
 	cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
 	cout << "Please Select ADMIN Or User" << endl;
 	cout << "1- ADMIN" << endl;
@@ -339,94 +340,114 @@ void TeamData()
 			cin >> FCIS.team[i].players[j].birthdate.year;
 		}
 	}
-	ofstream file;
-	file.open("teams.txt");
-	file << 20 << endl;
-	for (int i = 0; i < 20; i++) {
-		file << FCIS.team[i].name << endl;
-		file << 34 << endl;
-		for (int j = 0; j < 34; j++) {
-			file << FCIS.team[i].players[j].name << endl;
-			file << FCIS.team[i].players[j].nation << endl;
-			file << FCIS.team[i].players[j].birthdate.day << " "
-				<< FCIS.team[i].players[j].birthdate.month << " "
-				<< FCIS.team[i].players[j].birthdate.year << endl;
-			file << '\n';
-		}
-		file << '\n';
-	}
-	file.close();
+
 }
 
 void generate()
 {
 	int NUM_ROUNDS = 19;
 	string teams[NUM_TEAMS];
+	int id = 1;
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
 		teams[i] = FCIS.team[i].name;
 	}
-	ofstream file;
-	file.open("matches.txt");
+
 	for (int round = 0; round < NUM_ROUNDS; round++)
 	{
 
 		cout << "Round " << round + 1 << ":\n";
-		file << "Round " << round + 1 << ":\n";
-
+		int counter = 0, time = 4;
 		for (int i = 0; i < NUM_TEAMS / 2; i++)
 		{
-			string hometeam = teams[i];
-			string awayteam = teams[NUM_TEAMS - i - 1];
-			cout << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << "\n";
-			file << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << '\n';
+			mtch.TeamHome[id - 1] = teams[i];
+			mtch.TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
+			cout << "match " << id << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << "   " << time << "PM\n";
+			mtch.ID[id - 1] = id;
+			counter++;
+			if (counter >= 3 && counter < 6)
+			{
+				time = 6;
+			}
+			else if (counter == 6)
+			{
+				time = 8;
+			}
+			id++;
 		}
 		cout << "----------------\n";
-		file << "----------------\n";
 		rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
+
 	}
-	file.close();
 }
 
 
 void startseason()
 {
+	memset(mtch.Results, -1, sizeof(mtch.Results) * 190 * 2);
 	start = 1;
 	cout << "Do You want to start the season?\ny/n\n";
 	char ans = 'y';
 	cin >> ans;
 	if (ans == 'y')
 	{
-		string line;
-		ifstream file("matches.txt");
-		char resume = 'y';
-		int rounds = 0;
-		while (resume == 'y')
+		system("cls");
+		int resume = 1;
+		int rounds = 1,id=0, i=0;
+		while (true)
 		{
-			int x = 0;
-			while (getline(file, line))
+			cout << "Round " << rounds << '\n';
+			for (i = rounds * 10 - 10; i < rounds * 10; i++)
 			{
-				x++;
-				cout << line << '\n';
-				if (x == 12)
-					break;
+				if (mtch.Results[i][0] != -1 && mtch.Results[i][1] != -1)
+					cout << "match " << mtch.ID[i] << ": " << mtch.TeamHome[i] << ' ' << mtch.Results[i][0] << " vs " << mtch.Results[i][1] << ' ' << mtch.TeamAway[i] << '\n';
+				else
+					cout << "match " << mtch.ID[i] << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << '\n';
 			}
-			if (rounds != 19)
+			cout << "____________________________\n";
+			if (rounds != 20)
 			{
-				cout << "do you want to view next round?y/n\n";
-				cin >> resume;
+				cout << "Enter round results:\n";
+				for (int j = rounds*10-10; j < rounds*10; j++)
+				{
+					res(j);
+					system("cls");
+					cout << "Round " << rounds << '\n';
+					for(int z = rounds * 10 - 10; z < rounds * 10; z++)
+					{
+						if (mtch.Results[z][0] != -1 && mtch.Results[z][1] != -1)
+							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << ' ' << mtch.Results[z][0] << " vs " << mtch.Results[z][1] << ' ' << mtch.TeamAway[z] << '\n';
+						else
+							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << " vs " << mtch.TeamAway[z] << '\n';
+						
+					}
+					cout << "____________________________\n";
+				}
 			}
 			else
 			{
 				cout << "The season has finished\n";
 				break;
 			}
+
 			rounds++;
+			system("cls");
 		}
 	}
-	else
-	{
-		system("cls");
-		Afunctions();
-	}
+}
+
+
+void res(int i)
+{
+	
+	cout<<"match"<<i+1<<": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << '\n';
+	
+	cout << mtch.TeamHome[i] << " scored: ";
+	cin >> R.TeamHomeGoals;
+	
+	cout << mtch.TeamAway[i] << " scored: ";
+	cin >> R.TeamAwayGoals;
+	mtch.Results[i][0] = R.TeamHomeGoals;
+	mtch.Results[i][1] = R.TeamAwayGoals;
+
 }
