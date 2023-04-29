@@ -398,8 +398,8 @@ void generate()
 		{
 			mtch.TeamHome[id - 1] = teams[i];
 			mtch.TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
-			cout << "match " << id << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << "   " << time << "PM\n";
-			file << "match " << id << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << "   " << time << "PM\n";
+			cout << "match " << id << ": " << mtch.TeamHome[id-1] << " vs " << mtch.TeamAway[id-1] << "   " << time << "PM\n";
+			file << "match " << id << ": " << mtch.TeamHome[id-1] << " vs " << mtch.TeamAway[id-1] << "   " << time << "PM\n";
 			mtch.ID[id - 1] = id;
 			counter++;
 			if (counter >= 3 && counter < 6)
