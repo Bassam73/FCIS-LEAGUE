@@ -446,7 +446,7 @@ void startseason()
 		
 		while (true)
 		{
-			file.open("results.txt");
+			
 			cout << "Round " << rounds << '\n';
 			for (i = rounds * 10 - 10; i < rounds * 10; i++)
 			{
@@ -477,7 +477,7 @@ void startseason()
 					}
 					cout << "____________________________\n";
 				}
-				
+				file.open("results.txt");
 				for (int x = 1; x <= rounds; x++)
 				{
 					file << "round" << x << '\n';
