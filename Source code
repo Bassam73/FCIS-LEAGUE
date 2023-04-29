@@ -2,6 +2,7 @@
 #include<string>
 #include<fstream>
 #include<algorithm>
+#include<iomanip>
 
 
 using namespace std;
@@ -10,6 +11,8 @@ using namespace std;
 
 const int NUM_TEAMS = 20;
 
+const int NUM_ROUNDS = 19;
+
 const int MAX_TEAMS = 20;
 
 const int MAX_PLAYERS_PER_TEAM = 34;
@@ -17,6 +20,8 @@ const int MAX_PLAYERS_PER_TEAM = 34;
 bool start = 0;
 
 bool DataEntered = false;
+
+bool RoundPlayed[19] = { 0 };
 
 struct Date {
 	int day;
@@ -34,8 +39,10 @@ struct Player {
 struct Team {
 	string name;
 	Player players[34];
+	int points[20] = { 0 };
+	int GD[20] = { 0 };
 	int id;
-};
+}T;
 
 struct Result {
 
@@ -78,6 +85,8 @@ void Ulogin();
 void Afunctions();
 void startseason();
 void res(int i);
+void table(int i);
+void Logout();
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -183,9 +192,9 @@ void Alogin()
 	bool count = 0;
 	string Ausername, Apassowrd, Aemail, id, password;
 	cout << "--------------------------------------------------------------------------------------------\n";
-	cout << " Enter the username : ";
+	cout << "Enter the username : ";
 	cin >> Ausername;
-	cout << " Enter the password : ";
+	cout << "Enter the password : ";
 	cin >> Apassowrd;
 	ifstream input("records.txt");
 
@@ -294,13 +303,11 @@ void Afunctions() {
 		{
 			cout << "1-Enter teams and players " << endl;
 			cout << "2-Generate Matches " << endl;
-			cout << "3-start season\n";
+			cout << "3-Continue the season " << endl;
+			cout << "4-logout\n";
 			cin >> choice;
 			cout << "--------------------------------------------------------------------------------------------\n";
-			if (choice == 3)
-			{
-				startseason();
-			}
+
 		}
 		if (choice == 1)
 		{
@@ -312,10 +319,19 @@ void Afunctions() {
 			generate();
 			startseason();
 		}
-		if (choice == 2 && !DataEntered)
+		if ((choice == 2||choice==3) && !DataEntered)
 		{
 			cout << " enter team data first \n";
 			cout << "--------------------------------------------------------------------------------------------\n";
+
+		}
+		if (choice==3)
+		{
+			startseason();
+		}
+		if (choice == 4)
+		{
+			Logout();
 
 		}
 	}
@@ -338,7 +354,25 @@ void TeamData()
 			cin >> FCIS.team[i].players[j].birthdate.day;
 			cin >> FCIS.team[i].players[j].birthdate.month;
 			cin >> FCIS.team[i].players[j].birthdate.year;
+
 		}
+		ofstream file;
+		file.open("teams.txt");
+		file << 20 << endl;
+		for (int i = 0; i < 20; i++) {
+			file << FCIS.team[i].name << endl;
+			file << 34 << endl;
+			for (int j = 0; j < 34; j++) {
+				file << FCIS.team[i].players[j].name << endl;
+				file << FCIS.team[i].players[j].nation << endl;
+				file << FCIS.team[i].players[j].birthdate.day << " "
+					<< FCIS.team[i].players[j].birthdate.month << " "
+					<< FCIS.team[i].players[j].birthdate.year << endl;
+				file << '\n';
+			}
+			file << '\n';
+		}
+		file.close();
 	}
 
 }
@@ -348,6 +382,8 @@ void generate()
 	int NUM_ROUNDS = 19;
 	string teams[NUM_TEAMS];
 	int id = 1;
+	ofstream file;
+	file.open("matches.txt");
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
 		teams[i] = FCIS.team[i].name;
@@ -363,6 +399,7 @@ void generate()
 			mtch.TeamHome[id - 1] = teams[i];
 			mtch.TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
 			cout << "match " << id << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << "   " << time << "PM\n";
+			file << "match " << id << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << "   " << time << "PM\n";
 			mtch.ID[id - 1] = id;
 			counter++;
 			if (counter >= 3 && counter < 6)
@@ -376,24 +413,56 @@ void generate()
 			id++;
 		}
 		cout << "----------------\n";
+		file << "----------------\n";
 		rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
 
 	}
+	/*
+	ofstream file;
+	file.open("matches.txt");
+	for (int round = 0; round < NUM_ROUNDS; round++)
+	{
+
+		cout << "Round " << round + 1 << ":\n";
+		file << "Round " << round + 1 << ":\n";
+
+		for (int i = 0; i < NUM_TEAMS / 2; i++)
+		{
+			string hometeam = teams[i];
+			string awayteam = teams[NUM_TEAMS - i - 1];
+			cout << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << "\n";
+			file << "match " << i + 1 << ":" << hometeam << " vs " << awayteam << '\n';
+		}
+		cout << "----------------\n";
+		file << "----------------\n";
+		rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
+	}
+	file.close();*/
+	
 }
+
 
 
 void startseason()
 {
 	memset(mtch.Results, -1, sizeof(mtch.Results) * 190 * 2);
 	start = 1;
-	cout << "Do You want to start the season?\ny/n\n";
+	cout << "Do You want to start or continue the season?\ny/n\n";
 	char ans = 'y';
 	cin >> ans;
 	if (ans == 'y')
 	{
 		system("cls");
 		int resume = 1;
-		int rounds = 1,id=0, i=0;
+		int rounds , id = 0, i = 0;
+		for (int i = 0; i < NUM_ROUNDS; i++)
+		{
+			if (RoundPlayed[i]==0)
+			{
+				rounds = i + 1;
+				break;
+			}
+		}
 		while (true)
 		{
 			cout << "Round " << rounds << '\n';
@@ -408,30 +477,47 @@ void startseason()
 			if (rounds != 20)
 			{
 				cout << "Enter round results:\n";
-				for (int j = rounds*10-10; j < rounds*10; j++)
+				for (int j = rounds * 10 - 10; j < rounds * 10; j++)
 				{
 					res(j);
 					system("cls");
 					cout << "Round " << rounds << '\n';
-					for(int z = rounds * 10 - 10; z < rounds * 10; z++)
+					for (int z = rounds * 10 - 10; z < rounds * 10; z++)
 					{
 						if (mtch.Results[z][0] != -1 && mtch.Results[z][1] != -1)
 							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << ' ' << mtch.Results[z][0] << " vs " << mtch.Results[z][1] << ' ' << mtch.TeamAway[z] << '\n';
 						else
 							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << " vs " << mtch.TeamAway[z] << '\n';
-						
+
 					}
 					cout << "____________________________\n";
 				}
+				table(rounds);
+				RoundPlayed[rounds - 1] = 1;
 			}
 			else
 			{
+				
 				cout << "The season has finished\n";
 				break;
 			}
-
 			rounds++;
-			system("cls");
+			int x;
+			cout << " DO YOU WANT TO CONTINUE OR BACK TO MAIN MENU \n";
+			cout << "1- CONTINUE \n";
+			cout << "2- Main Menu \n";
+			cin >> x;
+			switch (x)
+			{
+			case 1:
+				continue;
+				break;
+			case 2 :
+				Afunctions();
+				break;
+			
+			}
+
 		}
 	}
 }
@@ -439,15 +525,129 @@ void startseason()
 
 void res(int i)
 {
-	
-	cout<<"match"<<i+1<<": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << '\n';
-	
+
+	cout << "match" << i + 1 << ": " << mtch.TeamHome[i] << " vs " << mtch.TeamAway[i] << '\n';
+
 	cout << mtch.TeamHome[i] << " scored: ";
 	cin >> R.TeamHomeGoals;
-	
+
 	cout << mtch.TeamAway[i] << " scored: ";
 	cin >> R.TeamAwayGoals;
 	mtch.Results[i][0] = R.TeamHomeGoals;
 	mtch.Results[i][1] = R.TeamAwayGoals;
+}
 
+
+
+
+void table(int i)
+{
+	string teams[NUM_TEAMS];
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		teams[i] = FCIS.team[i].name;
+	}
+	for (int j = i * 10 - 10; j < i * 10; j++)
+	{
+		if (mtch.Results[j][0] > mtch.Results[j][1])
+		{
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamHome[j])
+				{
+					T.points[z] += 3;
+					T.GD[z] += mtch.Results[j][0] - mtch.Results[j][1];
+					break;
+				}
+			}
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamAway[j])
+				{
+					T.GD[z] += mtch.Results[j][1] - mtch.Results[j][0];
+					break;
+				}
+			}
+
+		}
+		else if (mtch.Results[j][0] < mtch.Results[j][1])
+		{
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamAway[j])
+				{
+					T.points[z] += 3;
+					T.GD[z] = mtch.Results[j][1] - mtch.Results[j][0];
+					break;
+				}
+			}
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamHome[j])
+				{
+					T.GD[z] += mtch.Results[j][0] - mtch.Results[j][1];
+					break;
+				}
+			}
+		}
+		else if (mtch.Results[j][0] == mtch.Results[j][1])
+		{
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamHome[j])
+				{
+					T.points[z] += 1;
+					break;
+				}
+			}
+			for (int z = 0; z < NUM_TEAMS; z++)
+			{
+				if (teams[z] == mtch.TeamAway[j])
+				{
+					T.points[z] += 1;
+					break;
+				}
+			}
+		}
+
+	}
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		for (int j = NUM_TEAMS - 1; j >= 0; j--)
+		{
+			if (i != j)
+			{
+				if (T.points[i] < T.points[j] && i < j)
+				{
+					swap(teams[i], teams[j]);
+					swap(T.points[i], T.points[j]);
+					swap(T.GD[i], T.GD[j]);
+				}
+				else if (T.points[i] == T.points[j])
+				{
+					if (T.GD[i] < T.GD[j] && i < j)
+					{
+						swap(teams[i], teams[j]);
+						swap(T.points[i], T.points[j]);
+						swap(T.GD[i], T.GD[j]);
+					}
+				}
+			}
+		}
+	}
+	ofstream file;
+	file.open("table.txt");
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		cout << i + 1 << "-" << left << setw(20) << teams[i] << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
+		file << i + 1 << "-" << left << setw(20) << teams[i] << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
+	}
+	file.close();
+}
+
+
+
+void Logout(){
+	system("cls");
+	main();
 }
