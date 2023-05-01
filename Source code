@@ -86,7 +86,8 @@ void startseason();
 void res(int i);
 void table(int played);
 void Logout();
-/////////////////////////////////////////////////////////////////////////////////////////////////
+void Ufunctions();
+
 
 
 
@@ -165,7 +166,6 @@ void User()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -173,14 +173,31 @@ void User()
 
 void Aregister()
 {
-	string Ausername, Apassowrd;
+	string Ausername, Apassowrd,Eusername,Epassword;
+	bool count = 0;
 	cout << "--------------------------------------------------------------------------------------------\n";
 	cout << " Enter the username : ";
 	cin >> Ausername;
 	cout << " Enter the password : ";
 	cin >> Apassowrd;
 	ofstream f1("records.txt", ios::app);
+	ifstream input("records.txt");
 	f1 << Ausername << ' ' << Apassowrd << endl;
+
+	while (input >> Eusername >> Epassword)
+	{
+		if (Eusername == Ausername && Epassword == Apassowrd)
+			count = 1;
+	}
+	if (count==1)
+	{
+	
+		system("cls");
+
+		cout << "Your Username or password is already existed , please try again \n ";
+		
+		ADMIN();
+	}
 	system("cls");
 	cout << "you have registered successfully\nLogin now with your account";
 	ADMIN();
@@ -216,7 +233,7 @@ void Alogin()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // User Register And Login /
 
@@ -239,7 +256,7 @@ void Ulogin()
 		if (count == 1)
 		{
 			cout << "login succesful" << "\n";
-			main();
+			Ufunctions();
 		}
 		else {
 			cout << "LOGIN FAILED, TRY AGAIN" << "\n";
@@ -283,12 +300,12 @@ void Usignup()
 	}
 
 }
-////////////////////////////////////////////////////////////////////////////////
+
 //ADMIN FUNCTIONS
 void Afunctions() {
 	for (int i = 0; i < 1000; i++)
 	{
-		
+
 		int choice;
 		cout << " select \n";
 		if (start == 0)
@@ -411,13 +428,14 @@ void generate()
 		}
 		cout << "----------------\n";
 		file << "----------------\n";
+		//rotate loop 
 		string temp = teams[19];
 		for (int i = 19; i >= 1; i--)
 		{
 			teams[i] = teams[i - 1];
 		}
 		teams[1] = temp;
-		
+
 
 	}
 }
@@ -426,7 +444,7 @@ void generate()
 
 void startseason()
 {
-	
+
 	memset(mtch.Results, -1, sizeof(mtch.Results) * 190 * 2);
 	start = 1;
 	cout << "Do You want to start or continue the season?\ny/n\n";
@@ -446,10 +464,10 @@ void startseason()
 			}
 		}
 		ofstream file;
-		
+
 		while (true)
 		{
-			
+
 			cout << "Round " << rounds << '\n';
 			for (i = rounds * 10 - 10; i < rounds * 10; i++)
 			{
@@ -471,12 +489,12 @@ void startseason()
 					{
 						if (mtch.Results[z][0] != -1 && mtch.Results[z][1] != -1)
 						{
-							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << ' ' << mtch.Results[z][0] << " vs " << mtch.Results[z][1] << ' ' << mtch.TeamAway[z] << '\n';						
+							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << ' ' << mtch.Results[z][0] << " vs " << mtch.Results[z][1] << ' ' << mtch.TeamAway[z] << '\n';
 						}
 						else
 						{
 							cout << "match " << mtch.ID[z] << ": " << mtch.TeamHome[z] << " vs " << mtch.TeamAway[z] << '\n';
-						}			
+						}
 					}
 					cout << "____________________________\n";
 				}
@@ -521,7 +539,7 @@ void startseason()
 				Afunctions();
 				break;
 
-			}	
+			}
 		}
 	}
 }
@@ -660,4 +678,14 @@ void table(int played)
 void Logout() {
 	system("cls");
 	main();
+}
+
+
+
+//user functions
+
+
+void Ufunctions() {
+
+	cout << "Welcome to UFUNCTIONS";
 }
