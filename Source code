@@ -1,7 +1,6 @@
 #include<iostream>
 #include<string>
 #include<fstream>
-#include<algorithm>
 #include<iomanip>
 
 
@@ -85,7 +84,7 @@ void Ulogin();
 void Afunctions();
 void startseason();
 void res(int i);
-void table(int i);
+void table(int played);
 void Logout();
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -289,7 +288,7 @@ void Usignup()
 void Afunctions() {
 	for (int i = 0; i < 1000; i++)
 	{
-
+		
 		int choice;
 		cout << " select \n";
 		if (start == 0)
@@ -354,9 +353,7 @@ void TeamData()
 			cin >> FCIS.team[i].players[j].birthdate.day;
 			cin >> FCIS.team[i].players[j].birthdate.month;
 			cin >> FCIS.team[i].players[j].birthdate.year;
-
 		}
-		
 	}
 	ofstream file;
 	file.open("teams.txt");
@@ -398,8 +395,8 @@ void generate()
 		{
 			mtch.TeamHome[id - 1] = teams[i];
 			mtch.TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
-			cout << "match " << id << ": " << mtch.TeamHome[id-1] << " vs " << mtch.TeamAway[id-1] << "   " << time << "PM\n";
-			file << "match " << id << ": " << mtch.TeamHome[id-1] << " vs " << mtch.TeamAway[id-1] << "   " << time << "PM\n";
+			cout << "match " << id << ": " << mtch.TeamHome[id - 1] << " vs " << mtch.TeamAway[id - 1] << "   " << time << "PM\n";
+			file << "match " << id << ": " << mtch.TeamHome[id - 1] << " vs " << mtch.TeamAway[id - 1] << "   " << time << "PM\n";
 			mtch.ID[id - 1] = id;
 			counter++;
 			if (counter >= 3 && counter < 6)
@@ -414,7 +411,13 @@ void generate()
 		}
 		cout << "----------------\n";
 		file << "----------------\n";
-		rotate(teams + 1, teams + NUM_TEAMS - 1, teams + NUM_TEAMS);
+		string temp = teams[19];
+		for (int i = 19; i >= 1; i--)
+		{
+			teams[i] = teams[i - 1];
+		}
+		teams[1] = temp;
+		
 
 	}
 }
@@ -542,14 +545,14 @@ void res(int i)
 
 
 
-void table(int i)
+void table(int played)
 {
 	string teams[NUM_TEAMS];
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
 		teams[i] = FCIS.team[i].name;
 	}
-	for (int j = i * 10 - 10; j < i * 10; j++)
+	for (int j = played * 10 - 10; j < played * 10; j++)
 	{
 		if (mtch.Results[j][0] > mtch.Results[j][1])
 		{
@@ -637,12 +640,17 @@ void table(int i)
 			}
 		}
 	}
+	cout << "--------------------------------------------------------\n";
+	cout << " FCIS League Table \n";
+	cout << "--------------------------------------------------------\n";
+	cout << "Pos." << "  " << left << setw(20) << "Team" << '\t' << "MP" << '\t' << "Points" << '\t' << "GD" << '\n';
+	cout << "--------------------------------------------------------\n";
 	ofstream file;
 	file.open("table.txt");
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
-		cout << i + 1 << "-" << left << setw(20) << teams[i] << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
-		file << i + 1 << "-" << left << setw(20) << teams[i] << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
+		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << teams[i] << '\t' << played << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
+		file << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << teams[i] << '\t' << played << '\t' << T.points[i] << '\t' << T.GD[i] << '\n';
 	}
 	file.close();
 }
@@ -653,5 +661,3 @@ void Logout() {
 	system("cls");
 	main();
 }
-
-
