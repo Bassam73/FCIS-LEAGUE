@@ -24,7 +24,7 @@ bool RoundPlayed[19] = { 0 };
 
 bool Generate = 0;
 
-int rounds=0;
+int rounds = 0;
 
 struct Date {
 	int day;
@@ -97,6 +97,7 @@ void Ufunctions();
 void Tinformations();
 void Uschedule();
 void Utable();
+void PlayerDetailis(int i);
 
 
 
@@ -397,6 +398,7 @@ void TeamData()
 		for (int j = 0; j < 34; j++) {
 			cout << "Enter player " << j + 1 << " name: ";
 			cin >> FCIS.team[i].players[j].name;
+			FCIS.team[i].players[j].id = (i + 1) * (j + 1);
 			cout << "Enter player " << j + 1 << " nation: ";
 			cin >> FCIS.team[i].players[j].nation;
 			cout << "Enter player " << j + 1 << " birthdate (day / month / year): ";
@@ -413,7 +415,9 @@ void TeamData()
 		file << FCIS.team[i].name << endl;
 		file << 34 << endl;
 		for (int j = 0; j < 34; j++) {
+
 			file << FCIS.team[i].players[j].name << endl;
+			file << FCIS.team[i].players[j].id << endl; 
 			file << FCIS.team[i].players[j].nation << endl;
 			file << FCIS.team[i].players[j].birthdate.day << " "
 				<< FCIS.team[i].players[j].birthdate.month << " "
@@ -627,7 +631,7 @@ void table(int played)
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] ==FCIS.matches->TeamAway[j])
+				if (teams[z] == FCIS.matches->TeamAway[j])
 				{
 					FCIS.team[z].points += 3;
 					FCIS.team[z].GD = FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
@@ -777,19 +781,37 @@ void Tinformations() {
 	{
 		cout << i + 1 << "-" << FCIS.team[ChooseTeam - 1].players[i].name << endl;
 	}
+	cout << "-------------------------------------------------------\n";
+	
+	int TinformationVariable;
+	
+	cout << "1-Player Details " << endl;
+	cout << "2-Choose another team" << endl;
+	cout << "3-Main Menu" << endl;
+	cout << "4-Logout"<<endl;
+	cin >> TinformationVariable;
+	
+	switch (TinformationVariable)
+	{
+	case 1:
+		PlayerDetailis(ChooseTeam - 1);
+		break;
+	case 2 :
+		system("cls");
+		Tinformations();
+		break;
+	case 3 :
+		system("cls");
+		Ufunctions();
+		break;
+	case 4 :
+		system("cls");
+		Logout();
+		break;
+		
+	}
 
-	/*
 
-	team points : 5
-	team GD  : 10
-
-	if you want to see players press 1 ;
-
-
-
-
-
-	*/
 }
 
 
@@ -804,9 +826,9 @@ void Utable() {
 
 
 void Matchinfo();
-void Uschedule() 
+void Uschedule()
 {
-	int choice=0;
+	int choice = 0;
 	for (int i = 1; i <= 19; i++)
 	{
 		cout << "Round " << i << ":\n";
@@ -825,6 +847,8 @@ void Uschedule()
 		{
 			cout << "1-select match\n";
 			cout << "2-view next round\n";
+			cout << "3-main menu\n";
+			cout << "4-logut\n";
 			cin >> choice;
 			if (choice == 1)
 			{
@@ -833,8 +857,17 @@ void Uschedule()
 			}
 			else if (choice == 2)
 			{
+				system("cls");
+				Ufunctions();
 				break;
 			}
+			else if (choice == 4)
+			{
+				system("cls");
+				Logout();
+				break;
+			}
+			
 		}
 	}
 }
@@ -842,4 +875,56 @@ void Uschedule()
 void Matchinfo()
 {
 	cout << "0";
+}
+
+
+
+void PlayerDetailis(int i) {
+
+	int PlayerNumber;
+	cout << "Enter player number : "; cin >> PlayerNumber;
+
+
+	cout << FCIS.team[i].players[PlayerNumber-1].name <<" : \n";
+	cout << FCIS.team[i].players[PlayerNumber - 1].id << " : \n";
+
+	
+	cout << "Date Of Birth : " << FCIS.team[i].players[PlayerNumber-1].birthdate.day 
+				<< "/" << FCIS.team[i].players[PlayerNumber-1].birthdate.month << "/" 
+					  << FCIS.team[i].players[PlayerNumber-1].birthdate.year << endl;
+
+	cout << "Nationality : " << FCIS.team[i].players[PlayerNumber-1].nation<<endl;
+	
+	int SelectMenu;
+	
+	cout << "-----------------------------------------------------------\n";
+	cout << "1-Select another player "<<endl;
+	cout << "2-Select another team " << endl;
+	cout << "3-main menu" << endl;
+	cout << "4-logut" << endl;
+	cin >> SelectMenu;
+	switch (SelectMenu)
+	{
+	case 1:
+		PlayerDetailis(i);
+		break;
+	case 2:
+
+		system("cls");
+		Tinformations();
+		break;
+
+	case 3:
+
+		system("cls");
+		Ufunctions();
+		break;
+	case 4 :
+
+		system("cls");
+		Logout();
+		break;
+
+	
+	}
 }
