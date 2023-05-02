@@ -983,7 +983,6 @@ void Matchinfo()
 	cout << "Enter Match id:\n";
 	cin >> matchid;
 	cout << "------------------------------------------------------------\n";
-	//date bel3gwa
 	cout << "Match's time :" << FCIS.matches->Time[matchid] << "Pm\n";
 
 	cout << "Home Team: " << left << setw(7) << FCIS.matches->TeamHome[matchid - 1];
@@ -1025,25 +1024,17 @@ void PlayerDetailis(int i) {
 		PlayerDetailis(i);
 		break;
 	case 2:
-
 		system("cls");
 		Tinformations();
 		break;
 
 	case 3:
-
 		system("cls");
 		Ufunctions();
 		break;
 	case 4 :
-
 		system("cls");
 		Logout();
 		break;
 	}
 }
-
-
-
-
-
