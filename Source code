@@ -323,7 +323,6 @@ void Usignup()
 void Afunctions() {
 	for (int i = 0; i < 1000; i++)
 	{
-
 		int choice;
 		cout << "select \n";
 		if (start == 0)
@@ -344,6 +343,7 @@ void Afunctions() {
 				Generate = 1;
 				generate();
 				Afunctions();
+				break;
 			}
 			if ((choice == 2 || choice == 3) && !DataEntered)
 			{
@@ -355,6 +355,7 @@ void Afunctions() {
 			if (choice == 3 && DataEntered && Generate == 1)
 			{
 				startseason();
+				break;
 			}
 			if (choice == 3 && Generate == 0)
 			{
@@ -364,7 +365,7 @@ void Afunctions() {
 			if (choice == 4)
 			{
 				Logout();
-
+				break;
 			}
 		}
 		else if (start == 1)
@@ -376,12 +377,13 @@ void Afunctions() {
 			if (choice == 1)
 			{
 				startseason();
+				break;
 			}
 			if (choice == 2)
 			{
 				Logout();
+				break;
 			}
-
 		}
 
 	}
@@ -490,7 +492,7 @@ void startseason()
 	{
 		system("cls");
 		int resume = 1;
-		int rounds, id = 0, i = 0;
+		int  id = 0, i = 0;
 		for (int i = 0; i < NUM_ROUNDS; i++)
 		{
 			if (RoundPlayed[i] == 0)
@@ -828,49 +830,108 @@ void Utable() {
 void Matchinfo();
 void Uschedule()
 {
-	int choice = 0;
-	for (int i = 1; i <= 19; i++)
+	int select;
+	cout << "select\n";
+	cout << "1-Results\n";
+	cout << "2-fixtures\n";
+	cin >> select;
+	if (select == 1)
 	{
-		cout << "Round " << i << ":\n";
-		for (int z = i * 10 - 10; z < i * 10; z++)
+		for (int i = 1; i < rounds; i++)
 		{
-			if (FCIS.matches->Results[z][0] != -1 && FCIS.matches->Results[z][1] != -1)
+			cout << "Round " << i << ":\n";
+			for (int z = i * 10 - 10; z < i * 10; z++)
 			{
 				cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << ' ' << FCIS.matches->Results[z][0] << " vs " << FCIS.matches->Results[z][1] << ' ' << FCIS.matches->TeamAway[z] << '\n';
 			}
-			else
+		}
+		int choice;
+		cout << "1-select match\n";
+		cout << "2-view next fixtures\n";
+		cout << "3-main menu\n";
+		cout << "4-logut\n";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			Matchinfo();
+			break;
+		case 2:
+			select = 2;
+			break;
+		case 3:
+			system("cls");
+			Ufunctions();
+			break;
+		case 4:
+			system("cls");
+			Logout();
+			break;
+		}
+	}
+	if (select == 2)
+	{
+		for (int i = rounds; i <= 19; i++)
+		{
+			for (int z = i * 10 - 10; z < i * 10; z++)
 			{
 				cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << " vs " << FCIS.matches->TeamAway[z] << '\n';
 			}
-		}
-		while (true)
-		{
-			cout << "1-select match\n";
-			cout << "2-view next round\n";
-			cout << "3-main menu\n";
-			cout << "4-logut\n";
-			cin >> choice;
-			if (choice == 1)
+			int choice;
+			if (i != 19)
 			{
-				Matchinfo();
+				cout << "1-view next round\n";
+				cout << "2-main menu\n";
+				cout << "3-logut\n";
+				cin >> choice;
+				switch (choice)
+				{
+				case 1:
+					continue;
+					break;
+				case 2:
+					system("cls");
+					Ufunctions();
+					break;
+				case 3:
+					system("cls");
+					Logout();
+					break;
+				}
+				if (choice == 2 || choice == 3)
 				break;
 			}
-			else if (choice == 2)
+			if (i == 19)
 			{
-				system("cls");
-				Ufunctions();
-				break;
+				cout << "1-main menu\n";
+				cout << "2-logut\n";
+				cin >> choice;
+				switch (choice)
+				{
+				case 1:
+					system("cls");
+					Ufunctions();
+					break;
+				case 2:
+					system("cls");
+					Logout();
+					break;
+					//lma yd5l rkm gher 1 aw 2 btrkb
+				}
 			}
-			else if (choice == 4)
-			{
-				system("cls");
-				Logout();
-				break;
-			}
-			
 		}
 	}
+
+
+
+
+
+
+
+
+	
 }
+
 
 void Matchinfo()
 {
