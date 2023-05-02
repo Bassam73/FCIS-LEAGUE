@@ -59,6 +59,7 @@ struct Matches
 	int ID[190] = { 0 };
 	string TeamHome[190];
 	string TeamAway[190];
+	int Time[190] = { 0 };
 	int Results[190][2] = { 0 };
 };
 
@@ -98,6 +99,7 @@ void Tinformations();
 void Uschedule();
 void Utable();
 void PlayerDetailis(int i);
+void Matchinfo();
 
 
 
@@ -446,23 +448,29 @@ void generate()
 	for (int round = 0; round < NUM_ROUNDS; round++)
 	{
 		cout << "Round " << round + 1 << ":\n";
-		int counter = 0, time = 4;
+		int counter = 0;
+		FCIS.matches->Time[id - 1]=4;
 		for (int i = 0; i < NUM_TEAMS / 2; i++)
 		{
-			FCIS.matches->TeamHome[id - 1] = teams[i];
-			FCIS.matches->TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
-			cout << "match " << id << ": " << FCIS.matches->TeamHome[id - 1] << " vs " << FCIS.matches->TeamAway[id - 1] << "   " << time << "PM\n";
-			file << "match " << id << ": " << FCIS.matches->TeamHome[id - 1] << " vs " << FCIS.matches->TeamAway[id - 1] << "   " << time << "PM\n";
-			FCIS.matches->ID[id - 1] = id;
-			counter++;
+			
+			if(counter<3)
+			{
+				FCIS.matches->Time[id - 1] = 4;
+			}
 			if (counter >= 3 && counter < 6)
 			{
-				time = 6;
+				FCIS.matches->Time[id - 1] = 6;
 			}
-			else if (counter == 6)
+			if (counter >= 6)
 			{
-				time = 8;
+				FCIS.matches->Time[id - 1] = 8;
 			}
+			FCIS.matches->TeamHome[id - 1] = teams[i];
+			FCIS.matches->TeamAway[id - 1] = teams[NUM_TEAMS - i - 1];
+			cout << "match " << id << ": " << FCIS.matches->TeamHome[id - 1] << " vs " << FCIS.matches->TeamAway[id - 1] << "   " << FCIS.matches->Time[id - 1] << "PM\n";
+			file << "match " << id << ": " << FCIS.matches->TeamHome[id - 1] << " vs " << FCIS.matches->TeamAway[id - 1] << "   " << FCIS.matches->Time[id - 1] << "PM\n";
+			FCIS.matches->ID[id - 1] = id;
+			counter++;
 			id++;
 		}
 		cout << "----------------\n";
@@ -474,8 +482,6 @@ void generate()
 			teams[i] = teams[i - 1];
 		}
 		teams[1] = temp;
-
-
 	}
 }
 
@@ -596,22 +602,15 @@ void res(int i)
 }
 
 
-
-
 void table(int played)
 {
-	string teams[NUM_TEAMS];
-	for (int i = 0; i < NUM_TEAMS; i++)
-	{
-		teams[i] = FCIS.team[i].name;
-	}
 	for (int j = played * 10 - 10; j < played * 10; j++)
 	{
 		if (FCIS.matches->Results[j][0] > FCIS.matches->Results[j][1])
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamHome[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
 				{
 					FCIS.team[z].points += 3;
 					FCIS.team[z].GD += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
@@ -621,7 +620,7 @@ void table(int played)
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamAway[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
 				{
 					FCIS.team[z].GD += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
 					break;
@@ -633,16 +632,16 @@ void table(int played)
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamAway[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
 				{
 					FCIS.team[z].points += 3;
-					FCIS.team[z].GD = FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
+					FCIS.team[z].GD += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
 					break;
 				}
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamHome[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
 				{
 					FCIS.team[z].GD += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
 					break;
@@ -653,7 +652,7 @@ void table(int played)
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamHome[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
 				{
 					FCIS.team[z].points += 1;
 					break;
@@ -661,7 +660,7 @@ void table(int played)
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (teams[z] == FCIS.matches->TeamAway[j])
+				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
 				{
 					FCIS.team[z].points += 1;
 					break;
@@ -670,6 +669,7 @@ void table(int played)
 		}
 
 	}
+
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
 		for (int j = NUM_TEAMS - 1; j >= 0; j--)
@@ -678,7 +678,7 @@ void table(int played)
 			{
 				if (FCIS.team[i].points < FCIS.team[j].points && i < j)
 				{
-					swap(teams[i], teams[j]);
+					swap(FCIS.team[i].name, FCIS.team[j].name);
 					swap(FCIS.team[i].points, FCIS.team[j].points);
 					swap(FCIS.team[i].GD, FCIS.team[j].GD);
 				}
@@ -686,7 +686,7 @@ void table(int played)
 				{
 					if (FCIS.team[i].GD < FCIS.team[j].GD && i < j)
 					{
-						swap(teams[i], teams[j]);
+						swap(FCIS.team[i].name, FCIS.team[j].name);
 						swap(FCIS.team[i].points, FCIS.team[j].points);
 						swap(FCIS.team[i].GD, FCIS.team[j].GD);
 					}
@@ -704,8 +704,8 @@ void table(int played)
 	file.open("table.txt");
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
-		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << teams[i] << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
-		file << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << teams[i] << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+		file << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
 	}
 	file.close();
 }
@@ -752,7 +752,6 @@ void Ufunctions() {
 		Logout();
 		break;
 	default:
-
 		system("cls");
 		cout << "Please try again \n";
 		Ufunctions();
@@ -810,30 +809,58 @@ void Tinformations() {
 		system("cls");
 		Logout();
 		break;
-		
+	default:
+		system("cls");
+		cout << "Please try again \n";
+		Tinformations();
+		break;
 	}
-
-
 }
 
 
-void Utable() {
-
-	cout << "Ksomha fe tezha";
+void Utable()
+{
+	cout << "--------------------------------------------------------\n";
+	cout << " FCIS League Table \n";
+	cout << "--------------------------------------------------------\n";
+	cout << "Pos." << "  " << left << setw(20) << "Team" << '\t' << "MP" << '\t' << "Points" << '\t' << "GD" << '\n';
+	cout << "--------------------------------------------------------\n";
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << rounds << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+	}
+	int choice;
+	cout << "1-main menu\n";
+	cout << "2-logut\n";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1:
+		system("cls");
+		Ufunctions();
+		break;
+	case 2:
+		system("cls");
+		Logout();
+		break;
+	default:
+		system("cls");
+		cout << "Please try again \n";
+		Ufunctions();
+		break;
+	}
 }
 
 
 
 
-
-
-void Matchinfo();
 void Uschedule()
 {
 	int select;
 	cout << "select\n";
 	cout << "1-Results\n";
 	cout << "2-fixtures\n";
+	cout << "3-Main Menu\n";
 	cin >> select;
 	if (select == 1)
 	{
@@ -849,12 +876,13 @@ void Uschedule()
 		cout << "1-select match\n";
 		cout << "2-view next fixtures\n";
 		cout << "3-main menu\n";
-		cout << "4-logut\n";
+		cout << "4-logout\n";
 		cin >> choice;
 		switch (choice)
 		{
 		case 1:
 			Matchinfo();
+			Uschedule();
 			break;
 		case 2:
 			select = 2;
@@ -866,6 +894,11 @@ void Uschedule()
 		case 4:
 			system("cls");
 			Logout();
+			break;
+		default:
+			system("cls");
+			cout << "Please try again \n";
+			Ufunctions();
 			break;
 		}
 	}
@@ -897,57 +930,79 @@ void Uschedule()
 					system("cls");
 					Logout();
 					break;
+				default:
+
+					system("cls");
+					cout << "Please try again \n";
+					Ufunctions();
+					break;
 				}
 				if (choice == 2 || choice == 3)
-				break;
+					break;
 			}
 			if (i == 19)
 			{
-				cout << "1-main menu\n";
-				cout << "2-logut\n";
-				cin >> choice;
-				switch (choice)
+				while (true)
 				{
-				case 1:
-					system("cls");
-					Ufunctions();
-					break;
-				case 2:
-					system("cls");
-					Logout();
-					break;
-					//lma yd5l rkm gher 1 aw 2 btrkb
+					cout << "1-main menu\n";
+					cout << "2-logut\n";
+					cin >> choice;
+					switch (choice)
+					{
+					case 1:
+						system("cls");
+						Ufunctions();
+						break;
+					case 2:
+						system("cls");
+						Logout();
+						break;
+					default:
+						system("cls");
+						break;
+					}
+					if (choice == 1 || choice == 2)
+					{
+						break;
+					}
 				}
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-	
+	if (select == 3)
+	{
+		system("cls");
+		Ufunctions();
+	}
 }
 
 
 void Matchinfo()
 {
-	cout << "0";
-}
+	int matchid;
+	cout << "Enter Match id:\n";
+	cin >> matchid;
+	cout << "------------------------------------------------------------\n";
+	//date bel3gwa
+	cout << "Match's time :" << FCIS.matches->Time[matchid] << "Pm\n";
 
+	cout << "Home Team: " << left << setw(7) << FCIS.matches->TeamHome[matchid - 1];
+	cout << "scored: " << FCIS.matches->Results[matchid - 1][0] << '\n';
+
+	cout << "Away Team: " << left << setw(7) << FCIS.matches->TeamAway[matchid - 1];
+	cout << "scored: " << FCIS.matches->Results[matchid - 1][1] << '\n';
+}
 
 
 void PlayerDetailis(int i) {
 
 	int PlayerNumber;
-	cout << "Enter player number : "; cin >> PlayerNumber;
+	cout << "Enter player number : "; 
+	cin >> PlayerNumber;
 
 
-	cout << FCIS.team[i].players[PlayerNumber-1].name <<" : \n";
-	cout << FCIS.team[i].players[PlayerNumber - 1].id << " : \n";
+	cout<<"Player's name : " << FCIS.team[i].players[PlayerNumber - 1].name << " \n";
+	cout<<"player's id : " << FCIS.team[i].players[PlayerNumber - 1].id << " \n";
 
 	
 	cout << "Date Of Birth : " << FCIS.team[i].players[PlayerNumber-1].birthdate.day 
@@ -985,7 +1040,10 @@ void PlayerDetailis(int i) {
 		system("cls");
 		Logout();
 		break;
-
-	
 	}
 }
+
+
+
+
+
