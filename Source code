@@ -106,11 +106,16 @@ void Matchinfo();
 //main fuctions for admin and user
 int main()
 {
+	system("color 0F");
 	//Select user or admin
 	cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
-	cout << "Please Select ADMIN Or User" << endl;
-	cout << "1- ADMIN" << endl;
-	cout << "2- User" << endl;
+	
+	cout << char(201);      for (int i = 0; i < 29; i++) { cout << char(205); }      cout << char(187) << endl;
+	cout << char(186) << " Please Select ADMIN Or User " << char(186) << endl;
+	cout << char(200);      for (int i = 0; i < 29; i++) { cout << char(205); }      cout << char(188) << endl;
+	cout << char(201);  for (int i = 0; i < 9; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 9; i++) { cout << char(205); }  cout << char(187) << endl;
+	cout << char(186) << " 1-Admin " << char(186) << " 2-User  " << char(186) << endl;
+	cout << char(200);  for (int i = 0; i < 9; i++) { cout << char(205); }  cout << char(202);  for (int i = 0; i < 9; i++) { cout << char(205); }  cout << char(188) << endl;
 	//Process
 	int ADMINorUSER;
 	cin >> ADMINorUSER;
@@ -132,10 +137,11 @@ int main()
 void ADMIN()
 {
 	int AloginorAregister;
-	cout << " ----------------- MAIN MENU ------------------\n";
-	cout << "choose 1 or 2 \n";
-	cout << "1- register \n";
-	cout << "2- login \n";
+	system("cls");
+	cout << "\t\t\t\t\t----------------- MAIN MENU ------------------\n";
+	cout << char(201);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(187) << endl;
+	cout << char(186) << " 1-Register " << char(186) << "  2-Login   " << char(186) << endl;
+	cout << char(200);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(202);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(188) << endl;
 	cin >> AloginorAregister;
 	switch (AloginorAregister)
 	{
@@ -143,6 +149,7 @@ void ADMIN()
 		Aregister();
 		break;
 	case 2:
+		system("cls");
 		Alogin();
 		break;
 	default:
@@ -156,11 +163,10 @@ void ADMIN()
 void User()
 {
 	int UserVariable;
-
 	cout << "\t\t\t-------------Welcome to User-------------\t\t\t\n";
-	cout << "Please select 1 or 2 \n";
-	cout << "1-Register\n";
-	cout << "2-Login\n";
+	cout << char(201);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(187) << endl;
+	cout << char(186) << " 1-Register " << char(186) << "  2-Login   " << char(186) << endl;
+	cout << char(200);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(202);  for (int i = 0; i < 12; i++) { cout << char(205); }  cout << char(188) << endl;
 	cin >> UserVariable;
 	switch (UserVariable)
 	{
@@ -187,10 +193,13 @@ void Aregister()
 {
 	string Ausername, Apassowrd, Eusername, Epassword;
 	bool count = 0;
-	cout << "--------------------------------------------------------------------------------------------\n";
-	cout << " Enter the username : ";
+	cout << char(218);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(191) << endl;
+	cout << char(179) << " Enter username: " << char(179) << endl;
+	cout << char(192);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(217) << endl;
 	cin >> Ausername;
-	cout << " Enter the password : ";
+	cout << char(218);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(191) << endl;
+	cout << char(179) << " Enter password: " << char(179) << endl;
+	cout << char(192);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(217) << endl;
 	cin >> Apassowrd;
 	ofstream f1("records.txt", ios::app);
 	ifstream input("records.txt");
@@ -219,10 +228,13 @@ void Alogin()
 {
 	bool count = 0;
 	string Ausername, Apassowrd, Aemail, id, password;
-	cout << "--------------------------------------------------------------------------------------------\n";
-	cout << "Enter the username : ";
+	cout << char(218);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(191) << endl;
+	cout << char(179) << " Enter username: " << char(179) << endl;
+	cout << char(192);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(217) << endl;
 	cin >> Ausername;
-	cout << "Enter the password : ";
+	cout << char(218);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(191) << endl;
+	cout << char(179) << " Enter password: " << char(179) << endl;
+	cout << char(192);      for (int i = 0; i < 17; i++) { cout << char(196); }      cout << char(217) << endl;
 	cin >> Apassowrd;
 	ifstream input("records.txt");
 
@@ -326,13 +338,13 @@ void Afunctions() {
 	for (int i = 0; i < 1000; i++)
 	{
 		int choice;
-		cout << "select \n";
 		if (start == 0)
 		{
-			cout << "1-Enter teams and players " << endl;
-			cout << "2-Generate Matches " << endl;
-			cout << "3-start season\n";
-			cout << "4-logout\n";
+			cout << char(218);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(191) << endl;
+			cout << char(186) << "1-Enter teams and players" << char(186) << "3-start season    " << char(186) << endl;
+			cout << char(195);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(185) << endl;
+			cout << char(186) << "2-Generate Matches       " << char(186) << "4-logout          " << char(186) << endl;
+			cout << char(192);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(193);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(217) << endl;
 			cin >> choice;
 			cout << "--------------------------------------------------------------------------------------------\n";
 			if (choice == 1)
@@ -351,7 +363,8 @@ void Afunctions() {
 			{
 
 				system("cls");
-				cout << " enter team data first \n";
+				cout << "--------------------------------------------------------------------------------------------\n";
+				cout << " Enter team data first \n";
 				cout << "--------------------------------------------------------------------------------------------\n";
 			}
 			if (choice == 3 && DataEntered && Generate == 1)
@@ -372,8 +385,9 @@ void Afunctions() {
 		}
 		else if (start == 1)
 		{
-			cout << "1-Continue the season " << endl;
-			cout << "2-logout\n";
+			cout << char(201);  for (int i = 0; i < 22; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(187) << endl;
+			cout << char(186) << "1-Continue the season " << char(186) << "2-logout          " << char(186) << endl;
+			cout << char(200);  for (int i = 0; i < 22; i++) { cout << char(205); }  cout << char(202);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(188) << endl;
 			cin >> choice;
 			cout << "--------------------------------------------------------------------------------------------\n";
 			if (choice == 1)
@@ -729,12 +743,11 @@ void Ufunctions() {
 	cout << "\t\t\t\t                   Welcome                  \t\t\t\t\t\n";
 	cout << "\t\t\t\t------------------------------------------- \t\t\t\t\t\n";
 
-	cout << "Please choose a number \n";
-	cout << "1- Teams information \n";
-	cout << "2- See the schedule \n";
-	cout << "3- See the the table \n";
-	cout << "4- Logout \n";
-
+	cout << char(218);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(191) << endl;
+	cout << char(186) << "1- Teams information" << char(186) << "3- See the the table" << char(186) << endl;
+	cout << char(195);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(185) << endl;
+	cout << char(186) << "2- See the schedule " << char(186) << "4- Logout           " << char(186) << endl;
+	cout << char(192);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(193);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(217) << endl;
 	cin >> FunctionsVariable;
 
 	switch (FunctionsVariable)
