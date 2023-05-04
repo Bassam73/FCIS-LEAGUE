@@ -109,7 +109,7 @@ int main()
 	system("color 0F");
 	//Select user or admin
 	cout << "\t\t\t ------------------ Welcome to FCIS League----------------- \t\t\t" << endl;
-	
+
 	cout << char(201);      for (int i = 0; i < 29; i++) { cout << char(205); }      cout << char(187) << endl;
 	cout << char(186) << " Please Select ADMIN Or User " << char(186) << endl;
 	cout << char(200);      for (int i = 0; i < 29; i++) { cout << char(205); }      cout << char(188) << endl;
@@ -278,17 +278,19 @@ void Ulogin()
 			system("cls");
 		}
 		input.close();
-		if (count == 1)
-		{
-			cout << "login succesful" << "\n";
-			Ufunctions();
-			break;
-		}
-		else {
-			cout << "LOGIN FAILED, TRY AGAIN" << "\n";
-			Ulogin();
-			break;
-		}
+		
+	}
+	if (count == 1)
+	{
+		cout << "login succesful" << "\n";
+		Ufunctions();
+
+	}
+	else if (count == 0)
+	{
+		system("cls");
+		cout << "LOGIN FAILED, TRY AGAIN" << "\n";
+		Ulogin();
 	}
 
 }
@@ -435,7 +437,7 @@ void TeamData()
 		for (int j = 0; j < 34; j++) {
 
 			file << FCIS.team[i].players[j].name << endl;
-			file << FCIS.team[i].players[j].id << endl; 
+			file << FCIS.team[i].players[j].id << endl;
 			file << FCIS.team[i].players[j].nation << endl;
 			file << FCIS.team[i].players[j].birthdate.day << " "
 				<< FCIS.team[i].players[j].birthdate.month << " "
@@ -463,11 +465,11 @@ void generate()
 	{
 		cout << "Round " << round + 1 << ":\n";
 		int counter = 0;
-		FCIS.matches->Time[id - 1]=4;
+		FCIS.matches->Time[id - 1] = 4;
 		for (int i = 0; i < NUM_TEAMS / 2; i++)
 		{
-			
-			if(counter<3)
+
+			if (counter < 3)
 			{
 				FCIS.matches->Time[id - 1] = 4;
 			}
@@ -796,29 +798,29 @@ void Tinformations() {
 		cout << i + 1 << "-" << FCIS.team[ChooseTeam - 1].players[i].name << endl;
 	}
 	cout << "-------------------------------------------------------\n";
-	
+
 	int TinformationVariable;
-	
+
 	cout << "1-Player Details " << endl;
 	cout << "2-Choose another team" << endl;
 	cout << "3-Main Menu" << endl;
-	cout << "4-Logout"<<endl;
+	cout << "4-Logout" << endl;
 	cin >> TinformationVariable;
-	
+
 	switch (TinformationVariable)
 	{
 	case 1:
 		PlayerDetailis(ChooseTeam - 1);
 		break;
-	case 2 :
+	case 2:
 		system("cls");
 		Tinformations();
 		break;
-	case 3 :
+	case 3:
 		system("cls");
 		Ufunctions();
 		break;
-	case 4 :
+	case 4:
 		system("cls");
 		Logout();
 		break;
@@ -1009,24 +1011,24 @@ void Matchinfo()
 void PlayerDetailis(int i) {
 
 	int PlayerNumber;
-	cout << "Enter player number : "; 
+	cout << "Enter player number : ";
 	cin >> PlayerNumber;
 
 
-	cout<<"Player's name : " << FCIS.team[i].players[PlayerNumber - 1].name << " \n";
-	cout<<"player's id : " << FCIS.team[i].players[PlayerNumber - 1].id << " \n";
+	cout << "Player's name : " << FCIS.team[i].players[PlayerNumber - 1].name << " \n";
+	cout << "player's id : " << FCIS.team[i].players[PlayerNumber - 1].id << " \n";
 
-	
-	cout << "Date Of Birth : " << FCIS.team[i].players[PlayerNumber-1].birthdate.day 
-				<< "/" << FCIS.team[i].players[PlayerNumber-1].birthdate.month << "/" 
-					  << FCIS.team[i].players[PlayerNumber-1].birthdate.year << endl;
 
-	cout << "Nationality : " << FCIS.team[i].players[PlayerNumber-1].nation<<endl;
-	
+	cout << "Date Of Birth : " << FCIS.team[i].players[PlayerNumber - 1].birthdate.day
+		<< "/" << FCIS.team[i].players[PlayerNumber - 1].birthdate.month << "/"
+		<< FCIS.team[i].players[PlayerNumber - 1].birthdate.year << endl;
+
+	cout << "Nationality : " << FCIS.team[i].players[PlayerNumber - 1].nation << endl;
+
 	int SelectMenu;
-	
+
 	cout << "-----------------------------------------------------------\n";
-	cout << "1-Select another player "<<endl;
+	cout << "1-Select another player " << endl;
 	cout << "2-Select another team " << endl;
 	cout << "3-main menu" << endl;
 	cout << "4-logut" << endl;
@@ -1045,7 +1047,7 @@ void PlayerDetailis(int i) {
 		system("cls");
 		Ufunctions();
 		break;
-	case 4 :
+	case 4:
 		system("cls");
 		Logout();
 		break;
