@@ -2,6 +2,7 @@
 #include<string>
 #include<fstream>
 #include<iomanip>
+#include <cstdlib>
 
 
 using namespace std;
@@ -67,7 +68,7 @@ struct League
 {
 	Team team[20];
 	Matches matches[190];
-	/*Table Struct*/
+	// Table Struct //
 } FCIS;
 
 
@@ -253,7 +254,7 @@ void Alogin()
 	{
 		system("cls");
 		cout << "Please check your information\n";
-		ADMIN();
+		main();
 	}
 }
 
@@ -263,36 +264,31 @@ void Alogin()
 void Ulogin()
 {
 	bool count = 0;
-	string email2, password2, emailz, passwordz;
-	cout << "\t\t\t ------------------FCIS League----------------- \t\t\t" << endl;
-	cout << "please enter your email: ";
-	cin >> email2; cout << endl;
-	cout << "please enter your password: ";
-	cin >> password2; cout << endl;
-	ifstream input("UserSignup.txt");
-	while (input >> emailz >> passwordz)
+	string Ausername, Apassowrd, Aemail, id, password;
+	cout << "--------------------------------------------------------------------------------------------\n";
+	cout << "Enter the Email : ";
+	cin >> Ausername;
+	cout << "Enter the password : ";
+	cin >> Apassowrd;
+	ifstream input("User.txt");
+
+	while (input >> id >> password)
 	{
-		if (email2 == emailz && password2 == passwordz)
-		{
+		if (id == Ausername && password == Apassowrd)
 			count = 1;
-			system("cls");
-		}
-		input.close();
-		
 	}
 	if (count == 1)
 	{
-		cout << "login succesful" << "\n";
+		system("cls");
+		cout << "You logged in successfully\n";
 		Ufunctions();
-
 	}
-	else if (count == 0)
+	else
 	{
 		system("cls");
-		cout << "LOGIN FAILED, TRY AGAIN" << "\n";
-		Ulogin();
+		cout << "Please check your information\n";
+		main();
 	}
-
 }
 void Usignup()
 {
@@ -310,29 +306,10 @@ void Usignup()
 	cout << "please enter your password : ";
 	cin >> password; cout << endl;
 
-	cout << "please confirm your password :";
-	cin >> password_check; cout << endl;
-
-
-	if (password == password_check)
-	{
-		cout << "signup succsesful" << "\n";
-		cout << "welcome to FCIS league" << "\n";
-		User();
-
-	}
-	else
-	{
-
-		cout << "please try again :" << "\n";
-		Usignup();
-	}
-
-
-	ofstream f1("UserSignup.txt", ios::app);
-	f1 << emailaddress << ' ' << password_check << "\n";
-
-
+	ofstream f1("User.txt", ios::app);
+	ifstream input("records.txt");
+	f1 << emailaddress << ' ' << password << endl;
+	User();
 }
 
 //ADMIN FUNCTIONS
@@ -506,12 +483,14 @@ void generate()
 void startseason()
 {
 	memset(FCIS.matches->Results, -1, sizeof(FCIS.matches->Results) * 190 * 2);
-	start = 1;
+	
 	cout << "Do You want to start or continue the season?\ny/n\n";
-	char ans = 'y';
+	
+	char ans ;
 	cin >> ans;
 	if (ans == 'y')
 	{
+		start = 1;
 		system("cls");
 		int resume = 1;
 		int  id = 0, i = 0;
@@ -523,6 +502,7 @@ void startseason()
 				break;
 			}
 		}
+
 		ofstream file;
 
 		while (true)
@@ -601,6 +581,18 @@ void startseason()
 
 			}
 		}
+	}
+	else if (ans == 'n')
+	{
+		system("cls");
+		Afunctions();
+	
+	}
+	else
+	{
+		system("cls");
+		cout << "please enter y/n \n";
+		startseason();
 	}
 }
 
@@ -755,15 +747,19 @@ void Ufunctions() {
 	switch (FunctionsVariable)
 	{
 	case 1:
+		system("cls");
 		Tinformations();
 		break;
 	case 2:
+		system("cls");
 		Uschedule();
 		break;
 	case 3:
+		system("cls");
 		Utable();
 		break;
 	case 4:
+		system("cls");
 		Logout();
 		break;
 	default:
@@ -776,131 +772,55 @@ void Ufunctions() {
 }
 
 void Tinformations() {
-
-	int ChooseTeam;
-
-	cout << "Please Select the number of the team \n";
-
-	for (int i = 0; i < 20; i++)
+	if (start == 1)
 	{
-		cout << i + 1 << "-" << FCIS.team[i].name << endl;
-	}
-
-	cin >> ChooseTeam;
 
 
-	cout << FCIS.team[ChooseTeam - 1].name << " Informations : " << endl;
-	cout << FCIS.team[ChooseTeam - 1].name << " Has " << FCIS.team[ChooseTeam - 1].points << " points \n";
-	cout << "The GD of " << FCIS.team[ChooseTeam - 1].name << " is " << FCIS.team[ChooseTeam - 1].GD << endl;
-	cout << "players of the team : \n";
-	for (int i = 0; i < 34; i++)
-	{
-		cout << i + 1 << "-" << FCIS.team[ChooseTeam - 1].players[i].name << endl;
-	}
-	cout << "-------------------------------------------------------\n";
+		int ChooseTeam;
 
-	int TinformationVariable;
+		cout << "Please Select the number of the team \n";
 
-	cout << "1-Player Details " << endl;
-	cout << "2-Choose another team" << endl;
-	cout << "3-Main Menu" << endl;
-	cout << "4-Logout" << endl;
-	cin >> TinformationVariable;
-
-	switch (TinformationVariable)
-	{
-	case 1:
-		PlayerDetailis(ChooseTeam - 1);
-		break;
-	case 2:
-		system("cls");
-		Tinformations();
-		break;
-	case 3:
-		system("cls");
-		Ufunctions();
-		break;
-	case 4:
-		system("cls");
-		Logout();
-		break;
-	default:
-		system("cls");
-		cout << "Please try again \n";
-		Tinformations();
-		break;
-	}
-}
-
-
-void Utable()
-{
-	cout << "--------------------------------------------------------\n";
-	cout << " FCIS League Table \n";
-	cout << "--------------------------------------------------------\n";
-	cout << "Pos." << "  " << left << setw(20) << "Team" << '\t' << "MP" << '\t' << "Points" << '\t' << "GD" << '\n';
-	cout << "--------------------------------------------------------\n";
-	for (int i = 0; i < NUM_TEAMS; i++)
-	{
-		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << rounds << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
-	}
-	int choice;
-	cout << "1-main menu\n";
-	cout << "2-logut\n";
-	cin >> choice;
-	switch (choice)
-	{
-	case 1:
-		system("cls");
-		Ufunctions();
-		break;
-	case 2:
-		system("cls");
-		Logout();
-		break;
-	default:
-		system("cls");
-		cout << "Please try again \n";
-		Ufunctions();
-		break;
-	}
-}
-
-
-
-
-void Uschedule()
-{
-	int select;
-	cout << "select\n";
-	cout << "1-Results\n";
-	cout << "2-fixtures\n";
-	cout << "3-Main Menu\n";
-	cin >> select;
-	if (select == 1)
-	{
-		for (int i = 1; i < rounds; i++)
+		for (int i = 0; i < 20; i++)
 		{
-			cout << "Round " << i << ":\n";
-			for (int z = i * 10 - 10; z < i * 10; z++)
-			{
-				cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << ' ' << FCIS.matches->Results[z][0] << " vs " << FCIS.matches->Results[z][1] << ' ' << FCIS.matches->TeamAway[z] << '\n';
-			}
+			cout << i + 1 << "-" << FCIS.team[i].name << endl;
 		}
-		int choice;
-		cout << "1-select match\n";
-		cout << "2-view next fixtures\n";
-		cout << "3-main menu\n";
-		cout << "4-logout\n";
-		cin >> choice;
-		switch (choice)
+
+		cin >> ChooseTeam;
+
+
+		cout << FCIS.team[ChooseTeam - 1].name << " Informations : " << endl;
+		cout << FCIS.team[ChooseTeam - 1].name << " Has " << FCIS.team[ChooseTeam - 1].points << " points \n";
+		cout << "The GD of " << FCIS.team[ChooseTeam - 1].name << " is " << FCIS.team[ChooseTeam - 1].GD << endl;
+		cout << "players of the team : \n";
+		for (int i = 0; i < 34; i++)
+		{
+			cout << i + 1 << "-" << FCIS.team[ChooseTeam - 1].players[i].name << endl;
+		}
+		cout << "-------------------------------------------------------\n";
+
+		int TinformationVariable;
+
+
+		cout << char(218);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(191) << endl;
+		cout << char(186) << "1- player details    " << char(186) << "3- main menu        " << char(186) << endl;
+		cout << char(195);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(185) << endl;
+		cout << char(186) << "2-choose another team" << char(186) << "4- Logout           " << char(186) << endl;
+		cout << char(192);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(193);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(217) << endl;
+
+
+
+
+		cin >> TinformationVariable;
+
+		switch (TinformationVariable)
 		{
 		case 1:
-			Matchinfo();
-			Uschedule();
+			system("cls");
+			PlayerDetailis(ChooseTeam - 1);
 			break;
 		case 2:
-			select = 2;
+			system("cls");
+			Tinformations();
 			break;
 		case 3:
 			system("cls");
@@ -913,75 +833,220 @@ void Uschedule()
 		default:
 			system("cls");
 			cout << "Please try again \n";
+			Tinformations();
+			break;
+		}
+	}
+	else
+	{
+		system("cls");
+		cout << "No data to view \n";
+		Ufunctions();
+	}
+}
+
+
+void Utable()
+{
+	if (start == 1)
+	{
+
+
+		cout << "--------------------------------------------------------\n";
+		cout << " FCIS League Table \n";
+		cout << "--------------------------------------------------------\n";
+		cout << "Pos." << "  " << left << setw(20) << "Team" << '\t' << "MP" << '\t' << "Points" << '\t' << "GD" << '\n';
+		cout << "--------------------------------------------------------\n";
+		for (int i = 0; i < NUM_TEAMS; i++)
+		{
+			cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << rounds - 1 << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+		}
+		int choice;
+		cout << char(201);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 10; i++) { cout << char(205); }  cout << char(187) << endl;
+		cout << char(186) << "1-Main Menu" << char(186) << "2-logout  " << char(186) << endl;
+		cout << char(200);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(202);  for (int i = 0; i < 10; i++) { cout << char(205); }  cout << char(188) << endl;
+
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			system("cls");
+			Ufunctions();
+			break;
+		case 2:
+			system("cls");
+			Logout();
+			break;
+		default:
+			system("cls");
+			cout << "Please try again \n";
 			Ufunctions();
 			break;
 		}
 	}
-	if (select == 2)
+	else
 	{
-		for (int i = rounds; i <= 19; i++)
+		system("cls");
+		cout << "The season haven't start yet \n ";
+		Ufunctions();
+	}
+}
+
+
+void Uschedule()
+{
+
+	int select;
+	cout << char(218);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 10; i++) { cout << char(205); }  cout << char(191) << endl;
+	cout << char(186) << "1-results  " << char(186) << "2-fixtures" << char(186) << endl;
+	cout << char(195);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 10; i++) { cout << char(205); }  cout << char(188) << endl;
+	cout << char(186) << "3-Main Menu" << char(186) << endl;
+	cout << char(192);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(188) << endl;
+
+
+	cout << '\n';
+	cin >> select;
+	if (select == 1)
+	{
+		if (rounds == 0)
 		{
-			for (int z = i * 10 - 10; z < i * 10; z++)
+			system("cls");
+			cout << "No played rounds \n";
+			Ufunctions();
+		}
+		else
+		{
+
+
+			for (int i = 1; i < rounds; i++)
 			{
-				cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << " vs " << FCIS.matches->TeamAway[z] << '\n';
+				cout << "Round " << i << ":\n";
+				for (int z = i * 10 - 10; z < i * 10; z++)
+				{
+					cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << ' ' << FCIS.matches->Results[z][0] << " vs " << FCIS.matches->Results[z][1] << ' ' << FCIS.matches->TeamAway[z] << '\n';
+				}
 			}
 			int choice;
-			if (i != 19)
-			{
-				cout << "1-view next round\n";
-				cout << "2-main menu\n";
-				cout << "3-logut\n";
-				cin >> choice;
-				switch (choice)
-				{
-				case 1:
-					continue;
-					break;
-				case 2:
-					system("cls");
-					Ufunctions();
-					break;
-				case 3:
-					system("cls");
-					Logout();
-					break;
-				default:
 
-					system("cls");
-					cout << "Please try again \n";
-					Ufunctions();
-					break;
-				}
-				if (choice == 2 || choice == 3)
-					break;
-			}
-			if (i == 19)
+			cout << char(218);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(191) << endl;
+			cout << char(186) << "1- select match      " << char(186) << "3- main menu        " << char(186) << endl;
+			cout << char(195);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(185) << endl;
+			cout << char(186) << "2-view next fixtures " << char(186) << "4- Logout           " << char(186) << endl;
+			cout << char(192);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(193);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(217) << endl << endl;
+			cin >> choice;
+			switch (choice)
 			{
-				while (true)
+			case 1:
+				Matchinfo();
+				Uschedule();
+				break;
+			case 2:
+				select = 2;
+				break;
+			case 3:
+				system("cls");
+				Ufunctions();
+				break;
+			case 4:
+				system("cls");
+				Logout();
+				break;
+			default:
+				system("cls");
+				cout << "Please try again \n";
+				Ufunctions();
+				break;
+
+			}
+		}
+	}
+
+
+	if (select == 2)
+	{
+		if (start == 1)
+		{
+
+
+			system("cls");
+			for (int i = rounds; i <= 19; i++)
+			{
+				cout << "Round " << i << ":" << '\n';
+				for (int z = i * 10 - 10; z < i * 10; z++)
 				{
-					cout << "1-main menu\n";
-					cout << "2-logut\n";
+					cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << " vs " << FCIS.matches->TeamAway[z] << '\n';
+				}
+				int choice;
+				if (i != 19)
+				{
+					cout << char(218);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(191) << endl;
+					cout << char(186) << "1-view next round   " << char(186) << "2-Main Menu" << char(186) << endl;
+					cout << char(195);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(188) << endl;
+					cout << char(186) << "3-Logout            " << char(186) << endl;
+					cout << char(192);  for (int i = 0; i < 20; i++) { cout << char(205); }  cout << char(188) << endl;
 					cin >> choice;
 					switch (choice)
 					{
 					case 1:
+						continue;
+						break;
+					case 2:
 						system("cls");
 						Ufunctions();
 						break;
-					case 2:
+					case 3:
 						system("cls");
 						Logout();
 						break;
 					default:
+
 						system("cls");
+						cout << "Please try again \n";
+						Ufunctions();
 						break;
 					}
-					if (choice == 1 || choice == 2)
-					{
+					if (choice == 2 || choice == 3)
 						break;
+				}
+				if (i == 19)
+				{
+					while (true)
+					{
+						cout << char(201);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(187) << endl;
+						cout << char(186) << "                     " << char(186) << endl;
+						cout << char(186) << "  1-Main menu        " << char(186) << endl;
+						cout << char(186) << "                     " << char(186) << endl;
+						cout << char(186) << "  2-Log out          " << char(186) << endl;
+						cout << char(186) << "                     " << char(186) << endl;
+						cout << char(200);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(188) << endl;
+						cin >> choice;
+						switch (choice)
+						{
+						case 1:
+							system("cls");
+							Ufunctions();
+							break;
+						case 2:
+							system("cls");
+							Logout();
+							break;
+						default:
+							system("cls");
+							break;
+						}
+						if (choice == 1 || choice == 2)
+						{
+							break;
+						}
 					}
 				}
 			}
+		}
+		else 
+		{
+			system("cls");
+			cout << "The season haven't start yet \n" ;
+			Ufunctions();
 		}
 	}
 	if (select == 3)
@@ -1000,11 +1065,15 @@ void Matchinfo()
 	cout << "------------------------------------------------------------\n";
 	cout << "Match's time :" << FCIS.matches->Time[matchid] << "Pm\n";
 
-	cout << "Home Team: " << left << setw(7) << FCIS.matches->TeamHome[matchid - 1];
-	cout << "scored: " << FCIS.matches->Results[matchid - 1][0] << '\n';
-
-	cout << "Away Team: " << left << setw(7) << FCIS.matches->TeamAway[matchid - 1];
-	cout << "scored: " << FCIS.matches->Results[matchid - 1][1] << '\n';
+	cout << left << setw(14) << "Home Team " << left << setw(14) << " Stats " << left << setw(14) << "Away Team" << '\n';
+	cout << left << setw(14) << FCIS.matches->TeamHome[matchid - 1] << left << setw(14) << " Teams " << left << setw(14) << FCIS.matches->TeamAway[matchid - 1] << '\n';
+	cout << left << setw(14) << FCIS.matches->Results[matchid - 1][0] << left << setw(14) << " scored " << left << setw(14) << FCIS.matches->Results[matchid - 1][1] << '\n';
+	srand(time(NULL));
+	int shots = 1 + rand() % 30;
+	int shots1 = 1 + rand() % 20;
+	cout << left << setw(14) << shots << left << setw(14) << " Shots " << left << setw(14) << shots1 << '\n';
+	int POS = 41 + rand() % 30;
+	cout << left << setw(14) << POS << "%" << left << setw(14) << " possession  " << left << setw(14) << 100 - POS << "%" << '\n';
 }
 
 
