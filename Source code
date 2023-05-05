@@ -21,7 +21,7 @@ bool start = 0;
 
 bool DataEntered = false;
 
-bool RoundPlayed[19] = { 0 };
+bool RoundPlayed[20] = { 0 };
 
 bool Generate = 0;
 
@@ -43,8 +43,7 @@ struct Player {
 struct Team {
 	string name;
 	Player players[34];
-	int points = 0;
-	int GD = 0;
+
 	int id;
 };
 
@@ -74,9 +73,10 @@ struct League
 
 struct TableRecord
 {
-
-
-};
+	string tableteam[20];
+	int points[20] = { 0 };
+	int GD[20] = { 0 };
+}tabl;
 
 
 
@@ -386,7 +386,7 @@ void Afunctions() {
 
 void TeamData()
 {
-
+	memset(FCIS.matches->Results, -1, sizeof(FCIS.matches->Results) * 190 * 2);
 	for (int i = 0; i < 20; i++)
 	{
 		cout << "Enter the name of team " << i + 1 << ": ";
@@ -424,6 +424,10 @@ void TeamData()
 		file << '\n';
 	}
 	file.close();
+	for (int i = 0; i < NUM_TEAMS; i++)
+	{
+		tabl.tableteam[i] = FCIS.team[i].name;
+	}
 }
 
 void generate()
@@ -482,11 +486,10 @@ void generate()
 
 void startseason()
 {
-	memset(FCIS.matches->Results, -1, sizeof(FCIS.matches->Results) * 190 * 2);
-	
+
 	cout << "Do You want to start or continue the season?\ny/n\n";
-	
-	char ans ;
+
+	char ans;
 	cin >> ans;
 	if (ans == 'y')
 	{
@@ -507,18 +510,18 @@ void startseason()
 
 		while (true)
 		{
-
-			cout << "Round " << rounds << '\n';
-			for (i = rounds * 10 - 10; i < rounds * 10; i++)
-			{
-				if (FCIS.matches->Results[i][0] != -1 && FCIS.matches->Results[i][1] != -1)
-					cout << "match " << FCIS.matches->ID[i] << ": " << FCIS.matches->TeamHome[i] << ' ' << FCIS.matches->Results[i][0] << " vs " << FCIS.matches->Results[i][1] << ' ' << FCIS.matches->TeamAway[i] << '\n';
-				else
-					cout << "match " << FCIS.matches->ID[i] << ": " << FCIS.matches->TeamHome[i] << " vs " << FCIS.matches->TeamAway[i] << '\n';
-			}
-			cout << "____________________________\n";
 			if (rounds != 20)
 			{
+				cout << "Round " << rounds << '\n';
+				for (i = rounds * 10 - 10; i < rounds * 10; i++)
+				{
+					if (FCIS.matches->Results[i][0] != -1 && FCIS.matches->Results[i][1] != -1)
+						cout << "match " << FCIS.matches->ID[i] << ": " << FCIS.matches->TeamHome[i] << ' ' << FCIS.matches->Results[i][0] << " vs " << FCIS.matches->Results[i][1] << ' ' << FCIS.matches->TeamAway[i] << '\n';
+					else
+						cout << "match " << FCIS.matches->ID[i] << ": " << FCIS.matches->TeamHome[i] << " vs " << FCIS.matches->TeamAway[i] << '\n';
+				}
+				cout << "____________________________\n";
+
 				cout << "Enter round results:\n";
 				for (int j = rounds * 10 - 10; j < rounds * 10; j++)
 				{
@@ -561,7 +564,9 @@ void startseason()
 			}
 			else
 			{
+				cout << tabl.tableteam[0] << " is the champion\n";
 				cout << "The season has finished\n";
+				main();
 				break;
 			}
 			rounds++;
@@ -586,7 +591,7 @@ void startseason()
 	{
 		system("cls");
 		Afunctions();
-	
+
 	}
 	else
 	{
@@ -618,40 +623,39 @@ void table(int played)
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamHome[j])
 				{
-					FCIS.team[z].points += 3;
-					FCIS.team[z].GD += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
+					tabl.points[z] += 3;
+					tabl.GD[z] += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
 					break;
 
 				}
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamAway[j])
 				{
-					FCIS.team[z].GD += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
+					tabl.GD[z] += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
 					break;
 				}
 			}
-
 		}
 		else if (FCIS.matches->Results[j][0] < FCIS.matches->Results[j][1])
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamAway[j])
 				{
-					FCIS.team[z].points += 3;
-					FCIS.team[z].GD += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
+					tabl.points[z] += 3;
+					tabl.GD[z]+= FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
 					break;
 				}
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamHome[j])
 				{
-					FCIS.team[z].GD += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
+					tabl.GD[z] += FCIS.matches->Results[j][0] - FCIS.matches->Results[j][1];
 					break;
 				}
 			}
@@ -660,48 +664,46 @@ void table(int played)
 		{
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamHome[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamHome[j])
 				{
-					FCIS.team[z].points += 1;
+					tabl.points[z] += 1;
 					break;
 				}
 			}
 			for (int z = 0; z < NUM_TEAMS; z++)
 			{
-				if (FCIS.team[z].name == FCIS.matches->TeamAway[j])
+				if (tabl.tableteam[z] == FCIS.matches->TeamAway[j])
 				{
-					FCIS.team[z].points += 1;
+					tabl.points[z] += 1;
 					break;
 				}
 			}
 		}
 
 	}
-
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
 		for (int j = NUM_TEAMS - 1; j >= 0; j--)
 		{
 			if (i != j)
 			{
-				if (FCIS.team[i].points < FCIS.team[j].points && i < j)
+				if (tabl.points[i] < tabl.points[j] && i < j)
 				{
-					swap(FCIS.team[i].name, FCIS.team[j].name);
-					swap(FCIS.team[i].points, FCIS.team[j].points);
-					swap(FCIS.team[i].GD, FCIS.team[j].GD);
+					swap(tabl.tableteam[i], tabl.tableteam[j]);
+					swap(tabl.points[i], tabl.points[j]);
+					swap(tabl.GD[i], tabl.GD[j]);
 				}
-				else if (FCIS.team[i].points == FCIS.team[j].points)
+				else if (tabl.points[i] == tabl.points[j])
 				{
-					if (FCIS.team[i].GD < FCIS.team[j].GD && i < j)
+					if (tabl.GD[i] < tabl.GD[j] && i < j)
 					{
-						swap(FCIS.team[i].name, FCIS.team[j].name);
-						swap(FCIS.team[i].points, FCIS.team[j].points);
-						swap(FCIS.team[i].GD, FCIS.team[j].GD);
+						swap(tabl.tableteam[i], tabl.tableteam[j]);
+						swap(tabl.points[i], tabl.points[j]);
+						swap(tabl.GD[i], tabl.GD[j]);
 					}
 				}
 			}
 		}
-
 	}
 	cout << "--------------------------------------------------------\n";
 	cout << " FCIS League Table \n";
@@ -712,8 +714,8 @@ void table(int played)
 	file.open("table.txt");
 	for (int i = 0; i < NUM_TEAMS; i++)
 	{
-		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
-		file << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << played << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+		cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << tabl.tableteam[i] << '\t' << played << '\t' << tabl.points[i] << '\t' << tabl.GD[i] << '\n';
+		file << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << tabl.tableteam[i] << '\t' << played << '\t' << tabl.points[i] << '\t' << tabl.GD[i] << '\n';
 	}
 	file.close();
 }
@@ -730,7 +732,8 @@ void Logout() {
 //user functions
 
 
-void Ufunctions() {
+void Ufunctions()
+{
 
 	int FunctionsVariable;
 	cout << "\t\t\t\t------------------------------------------- \t\t\t\t\t\n";
@@ -771,12 +774,13 @@ void Ufunctions() {
 
 }
 
-void Tinformations() {
-	if (start == 1)
+void Tinformations()
+{
+	if (DataEntered == 1)
 	{
 
 
-		int ChooseTeam;
+		int ChooseTeam,pos;
 
 		cout << "Please Select the number of the team \n";
 
@@ -786,11 +790,18 @@ void Tinformations() {
 		}
 
 		cin >> ChooseTeam;
-
-
+		for (int i = 0; i < NUM_TEAMS; i++)
+		{
+			if (FCIS.team[ChooseTeam - 1].name == tabl.tableteam[i])
+			{
+				pos = i;
+			}
+		}
+		cout << "-------------------------------------------------------\n";
 		cout << FCIS.team[ChooseTeam - 1].name << " Informations : " << endl;
-		cout << FCIS.team[ChooseTeam - 1].name << " Has " << FCIS.team[ChooseTeam - 1].points << " points \n";
-		cout << "The GD of " << FCIS.team[ChooseTeam - 1].name << " is " << FCIS.team[ChooseTeam - 1].GD << endl;
+		cout << FCIS.team[ChooseTeam - 1].name << " is in " << pos + 1 << " position \n";
+		cout << FCIS.team[ChooseTeam - 1].name << " Has " << tabl.points[pos] << " points \n";
+		cout << "The GD of " << FCIS.team[ChooseTeam - 1].name << " is " << tabl.GD[pos] << endl;
 		cout << "players of the team : \n";
 		for (int i = 0; i < 34; i++)
 		{
@@ -815,7 +826,7 @@ void Tinformations() {
 		switch (TinformationVariable)
 		{
 		case 1:
-			system("cls");
+
 			PlayerDetailis(ChooseTeam - 1);
 			break;
 		case 2:
@@ -859,7 +870,7 @@ void Utable()
 		cout << "--------------------------------------------------------\n";
 		for (int i = 0; i < NUM_TEAMS; i++)
 		{
-			cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << FCIS.team[i].name << '\t' << rounds - 1 << '\t' << FCIS.team[i].points << '\t' << FCIS.team[i].GD << '\n';
+			cout << i + 1 << "-" << left << setw(5) << "  " << left << setw(20) << tabl.tableteam[i] << '\t' << rounds - 1 << '\t' << tabl.points[i] << '\t' << tabl.GD[i] << '\n';
 		}
 		int choice;
 		cout << char(201);  for (int i = 0; i < 11; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 10; i++) { cout << char(205); }  cout << char(187) << endl;
@@ -925,6 +936,7 @@ void Uschedule()
 				{
 					cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << ' ' << FCIS.matches->Results[z][0] << " vs " << FCIS.matches->Results[z][1] << ' ' << FCIS.matches->TeamAway[z] << '\n';
 				}
+				cout << "--------------------------------------------------------\n";
 			}
 			int choice;
 
@@ -976,6 +988,7 @@ void Uschedule()
 				{
 					cout << "match " << FCIS.matches->ID[z] << ": " << FCIS.matches->TeamHome[z] << " vs " << FCIS.matches->TeamAway[z] << '\n';
 				}
+				cout << "--------------------------------------------------------\n";
 				int choice;
 				if (i != 19)
 				{
@@ -1042,10 +1055,10 @@ void Uschedule()
 				}
 			}
 		}
-		else 
+		else
 		{
 			system("cls");
-			cout << "The season haven't start yet \n" ;
+			cout << "The season haven't start yet \n";
 			Ufunctions();
 		}
 	}
@@ -1073,7 +1086,7 @@ void Matchinfo()
 	int shots1 = 1 + rand() % 20;
 	cout << left << setw(14) << shots << left << setw(14) << " Shots " << left << setw(14) << shots1 << '\n';
 	int POS = 41 + rand() % 30;
-	cout << left << setw(14) << POS << "%" << left << setw(14) << " possession  " << left << setw(14) << 100 - POS << "%" << '\n';
+	cout << POS << left << setw(14) << "%" << left << setw(14) << " possession  " << 100 - POS << left << setw(14) << "%" << '\n';
 }
 
 
@@ -1083,7 +1096,7 @@ void PlayerDetailis(int i) {
 	cout << "Enter player number : ";
 	cin >> PlayerNumber;
 
-
+	cout << "-----------------------------------------------------------\n";
 	cout << "Player's name : " << FCIS.team[i].players[PlayerNumber - 1].name << " \n";
 	cout << "player's id : " << FCIS.team[i].players[PlayerNumber - 1].id << " \n";
 
