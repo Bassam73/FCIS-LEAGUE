@@ -27,11 +27,13 @@ bool Generate = 0;
 
 int rounds = 0;
 
+bool startdatebool = 0 ;
+
 struct Date {
 	int day;
 	int month;
 	int year;
-};
+}SeasonStart;
 
 
 struct Player {
@@ -91,6 +93,7 @@ void generate();
 void Usignup();
 void Ulogin();
 void Afunctions();
+void StartSeasonDate();
 void startseason();
 void res(int i);
 void table(int played);
@@ -324,6 +327,9 @@ void Afunctions() {
 			cout << char(195);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(185) << endl;
 			cout << char(186) << "2-Generate Matches       " << char(186) << "4-logout          " << char(186) << endl;
 			cout << char(192);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(193);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(217) << endl;
+			cout << char(218);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(194);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(191) << endl;
+			cout << char(186) << "5-User functions         " << char(186) << "6-start season date  " << char(186) << endl;
+			cout << char(195);  for (int i = 0; i < 25; i++) { cout << char(205); }  cout << char(197);  for (int i = 0; i < 21; i++) { cout << char(205); }  cout << char(185) << endl;
 			cin >> choice;
 			cout << "--------------------------------------------------------------------------------------------\n";
 			if (choice == 1)
@@ -361,7 +367,26 @@ void Afunctions() {
 				Logout();
 				break;
 			}
+			if (choice == 5)
+			{
+				system("cls");
+				Ufunctions();
+				break;
+			}
+			if (choice == 6)
+			{
+				system("cls");
+				StartSeasonDate();
+				break;
+			}
+			if (choice<0||choice >6)
+			{
+				system("cls");
+				cout << "Please Enter a number between 1 and 6 \n";
+				Afunctions();
+			}
 		}
+		
 		else if (start == 1)
 		{
 			cout << char(201);  for (int i = 0; i < 22; i++) { cout << char(205); }  cout << char(203);  for (int i = 0; i < 18; i++) { cout << char(205); }  cout << char(187) << endl;
@@ -382,6 +407,32 @@ void Afunctions() {
 		}
 
 	}
+}
+
+
+void StartSeasonDate() {
+	
+
+	if (startdatebool == 0) {
+		cout << "Enter the start season date : \n";
+		cout << "DD MM YYYY \n";
+		cin >> SeasonStart.day >> SeasonStart.month >> SeasonStart.year;
+
+		startdatebool = 1;
+		system("cls");
+		Afunctions();
+	}
+	else
+	{
+		system("cls");
+		cout << "You have entered the start season date already!!!! \n";
+		Afunctions();
+	
+	}
+	
+	
+	
+
 }
 
 void TeamData()
@@ -647,7 +698,7 @@ void table(int played)
 				if (tabl.tableteam[z] == FCIS.matches->TeamAway[j])
 				{
 					tabl.points[z] += 3;
-					tabl.GD[z]+= FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
+					tabl.GD[z] += FCIS.matches->Results[j][1] - FCIS.matches->Results[j][0];
 					break;
 				}
 			}
@@ -780,7 +831,7 @@ void Tinformations()
 	{
 
 
-		int ChooseTeam,pos;
+		int ChooseTeam, pos;
 
 		cout << "Please Select the number of the team \n";
 
@@ -797,6 +848,7 @@ void Tinformations()
 				pos = i;
 			}
 		}
+		system("cls");
 		cout << "-------------------------------------------------------\n";
 		cout << FCIS.team[ChooseTeam - 1].name << " Informations : " << endl;
 		cout << FCIS.team[ChooseTeam - 1].name << " is in " << pos + 1 << " position \n";
@@ -1001,6 +1053,7 @@ void Uschedule()
 					switch (choice)
 					{
 					case 1:
+						system("cls");
 						continue;
 						break;
 					case 2:
@@ -1066,6 +1119,12 @@ void Uschedule()
 	{
 		system("cls");
 		Ufunctions();
+	}
+	if (select<0||select>3)
+	{
+		system("cls");
+		cout << "please choose between 1 : 3 \n";
+		Uschedule();
 	}
 }
 
